@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#070605">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="مُرابِط">
+<title>مُرابِط</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;700&family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0907;--panel:#12100C;--line:#3A2F1F;--bronze:#6B5532;--gold:#D9B26F;--gold2:#F0D49A;--tan:#C9A86A;--text:#E8DCC2;--soft:#CFC3A8;--muted:#B8AA8E;--dim:#9A8F7A;--rust:#C0503A;--red:#6E1F16;--alert:#E8644A;--ok:#8FB07A}
+*{box-sizing:border-box}
+html,body{margin:0;background:#070605;color:var(--text);font-family:Cairo,sans-serif;-webkit-tap-highlight-color:transparent}
+button{font-family:inherit;color:inherit;cursor:pointer}
+a{color:var(--gold)}
+#app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--bg);position:relative;padding-bottom:calc(150px + env(safe-area-inset-bottom))}
+.kufi{font-family:'Reem Kufi',sans-serif}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:18px 18px 12px;border-bottom:1px solid var(--line)}
+.hdr h1{margin:0;font-family:'Reem Kufi',sans-serif;font-size:26px;color:var(--gold2)}
+.hdr small{display:block;text-align:center;font-size:11px;color:var(--muted)}
+.back{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:1px solid var(--bronze);color:var(--gold);text-decoration:none}
+.pad{padding:0 18px}
+.card{background:var(--panel);border:1px solid var(--line);padding:14px}
+.cut{clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px)}
+.h2{margin:20px 18px 10px;font-family:'Reem Kufi',sans-serif;font-size:16px;font-weight:500;color:var(--tan)}
+.p{margin:12px 18px 0;font-size:13px;line-height:1.7;color:var(--soft)}
+.bar{height:12px;background:#1E1912;border:1px solid var(--bronze);padding:2px}
+.bar>div{height:100%;background:linear-gradient(90deg,#8E2B1F,var(--tan))}
+.big{display:flex;align-items:center;justify-content:center;gap:10px;height:60px;border:1px solid var(--gold);background:var(--red);color:#F6E7C8;font-family:'Reem Kufi',sans-serif;font-size:20px;font-weight:700;text-decoration:none;width:100%}
+.big.calm{background:#3E3018}
+.hex{clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,14px 100%,0 50%)}
+.row{display:flex;align-items:center;gap:12px;min-height:50px;padding:8px 12px;background:var(--panel);border:1px solid var(--line);text-align:right;width:100%;font-size:14px}
+.row.on{border-color:var(--tan);background:#1E1810}
+.chk{width:24px;height:24px;flex:none;border:1px solid var(--tan);display:flex;align-items:center;justify-content:center;font-weight:800;color:#0A0907}
+.row.on .chk{background:var(--tan)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{min-height:40px;padding:0 12px;border:1px solid var(--line);background:transparent;font-size:13px}
+.chip.on{border-color:var(--gold2);background:#221C12;color:var(--gold2);font-weight:700}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.muted{color:var(--muted)}
+.foot{margin:22px 18px 8px;text-align:center;font-size:12px;color:var(--dim)}
+nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-top:1px solid var(--line);background:#0E0C09;z-index:5;padding-bottom:env(safe-area-inset-bottom)}
+nav a{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 0 12px;text-decoration:none;color:var(--dim);font-size:12px;border-top:2px solid transparent}
+nav a.on{color:var(--gold2);font-weight:700;border-top-color:var(--gold)}
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#221C12;border:1px solid var(--gold);color:var(--gold2);padding:10px 18px;font-weight:700;z-index:9;font-size:14px;max-width:90%;text-align:center}
+.heat{display:grid;grid-template-columns:56px repeat(7,minmax(0,1fr));gap:4px;align-items:center}
+.heat span{font-size:10px;color:var(--muted);text-align:center}
+.heat b{font-size:11px;font-weight:400;color:var(--soft)}
+.heat i{height:26px;border:1px solid #2A231A;display:block}
+.ic{object-fit:contain;display:block}.ic.rust{filter:sepia(1) saturate(3) hue-rotate(-30deg) brightness(.7) contrast(1.1)}
+#intro{position:fixed;inset:0;z-index:20;background:#070605;display:flex;justify-content:center;transition:opacity .5s ease;cursor:pointer}
+#intro .fr{position:relative;width:100%;max-width:480px;height:100%;overflow:hidden}
+#intro .im{position:absolute;inset:0;background:#070605 center 22%/cover no-repeat}
+#intro .sh{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,6,5,.55) 0%,rgba(7,6,5,0) 30%,rgba(7,6,5,0) 55%,#070605 92%)}
+#intro .lb{position:absolute;left:0;right:0;bottom:12%;text-align:center}
+#intro .nm{font-family:'Reem Kufi',sans-serif;font-size:44px;font-weight:700;color:#F0D49A;line-height:1.2}
+#intro .sb{font-size:14px;color:#B8AA8E;margin-top:4px;letter-spacing:1px}
+#intro .ps{position:absolute;inset:0;background:#070605 center top/cover no-repeat;opacity:0;transform:scale(1.08);filter:brightness(.4);transition:opacity 1.6s ease,transform 3.4s cubic-bezier(.2,.7,.2,1),filter 2s ease;z-index:2}
+#intro .ps.in{opacity:1;transform:scale(1);filter:brightness(1)}#intro .ps.out{opacity:0;transition:opacity .45s ease}
+#intro canvas{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none}
+#intro .sk{z-index:4;position:absolute;top:14px;left:14px;min-height:40px;padding:0 14px;border:1px solid #3A2F1F;background:rgba(10,9,7,.6);color:#B8AA8E;font-size:12px}
+@keyframes slam{0%{transform:scale(1.14);filter:brightness(2.4) saturate(.6)}100%{transform:scale(1);filter:brightness(1) saturate(1)}}
+@keyframes land{0%{transform:scale(1.2);filter:brightness(3)}60%{transform:scale(.98);filter:brightness(1.1)}100%{transform:scale(1);filter:brightness(1)}}
+@keyframes rise{0%{opacity:0;transform:translateY(12px)}100%{opacity:1;transform:none}}
+#intro .slam{animation:slam .24s ease-out}
+#intro .land{animation:land .7s cubic-bezier(.2,.8,.2,1)}
+#intro .rise{animation:rise .5s ease-out both}
+.pi{position:relative;display:inline-block;flex:none}.pi img{width:100%;height:100%;object-fit:contain;display:block}
+.mk{position:absolute;inset:0;-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center}
+.mk svg{width:100%;height:100%;display:block}
+.shine{background:linear-gradient(110deg,transparent 30%,rgba(255,236,190,.75) 48%,transparent 62%);background-size:300% 100%;animation:sweep 2.8s ease-in-out infinite;mix-blend-mode:screen}
+@keyframes sweep{0%{background-position:120% 0}60%,100%{background-position:-60% 0}}
+.rustspots{background:radial-gradient(circle at 30% 35%,rgba(150,60,20,.85) 0 9%,transparent 16%),radial-gradient(circle at 68% 60%,rgba(120,45,15,.8) 0 7%,transparent 14%),radial-gradient(circle at 45% 78%,rgba(160,70,25,.7) 0 6%,transparent 12%),radial-gradient(circle at 75% 25%,rgba(110,40,12,.75) 0 5%,transparent 11%);mix-blend-mode:multiply}
+.scrollwrap{margin:22px 12px 0;position:relative}
+.roller{height:22px;margin:0 8px;border-radius:11px;position:relative;z-index:2;background:linear-gradient(180deg,#e2bd8c 0%,#b07f45 40%,#7a4b24 75%,#5a3418 100%);box-shadow:0 4px 8px rgba(0,0,0,.6)}
+.roller::before,.roller::after{content:'';position:absolute;top:50%;width:22px;height:34px;transform:translateY(-50%);border-radius:45%;background:radial-gradient(ellipse at 40% 30%,#9a6a42,#5a3418 55%,#2e1a0b 100%);box-shadow:0 2px 4px rgba(0,0,0,.6)}
+.roller::before{right:-14px}.roller::after{left:-14px}
+.parch{margin:-8px 20px;padding:26px 18px 22px;position:relative;z-index:1;color:#3B2410;
+background:radial-gradient(ellipse at 20% 15%,rgba(140,90,40,.18),transparent 40%),radial-gradient(ellipse at 80% 70%,rgba(120,70,25,.2),transparent 45%),radial-gradient(ellipse at 50% 50%,#E3C79A 0%,#D6B47F 60%,#C49A62 100%);
+box-shadow:inset 0 0 50px rgba(95,55,15,.55),inset 0 0 8px rgba(70,40,10,.6);clip-path:polygon(99.3% 0.0%,99.7% 5.6%,98.6% 11.1%,99.8% 16.7%,98.8% 22.2%,99.2% 27.8%,99.9% 33.3%,98.9% 38.9%,99.9% 44.4%,99.0% 50.0%,99.8% 55.6%,99.8% 61.1%,99.1% 66.7%,98.2% 72.2%,99.7% 77.8%,99.5% 83.3%,98.6% 88.9%,97.9% 94.4%,98.7% 100.0%,0.9% 100.0%,2.1% 94.4%,0.1% 88.9%,1.9% 83.3%,0.6% 77.8%,0.3% 72.2%,0.3% 66.7%,0.7% 61.1%,1.8% 55.6%,0.4% 50.0%,1.3% 44.4%,1.4% 38.9%,0.8% 33.3%,1.2% 27.8%,0.1% 22.2%,0.1% 16.7%,0.5% 11.1%,1.5% 5.6%,0.9% 0.0%)}
+.parch .ptitle{margin:0 0 10px;text-align:center;font-family:'Reem Kufi',sans-serif;font-size:22px;font-weight:700;color:#4A2A10}
+.parch .row{background:transparent;border:0;border-bottom:1px dashed rgba(90,55,25,.4);color:#3B2410;min-height:46px;font-weight:600}
+.parch .row:last-child{border-bottom:0}
+.parch .row.on{background:rgba(110,65,20,.10)}
+.parch .row.on span:last-child{color:#6B4A2A}
+.parch .chk{border:1.5px solid #6B4423;color:#F3E3C3;background:transparent}
+.parch .row.on .chk{background:#6B4423}
+.rowwrap{display:flex;align-items:stretch;gap:8px}.rowwrap .row{flex:1}
+.readbtn{flex:none;display:flex;align-items:center;justify-content:center;min-width:64px;min-height:44px;padding:0 10px;border:1px solid var(--gold);color:var(--gold2);background:#221C12;text-decoration:none;font-size:13px;font-weight:700}
+.parch .rowwrap{border-bottom:1px dashed rgba(90,55,25,.4)}.parch .rowwrap .row{border-bottom:0}
+.parch .readbtn{background:#6B4423;border-color:#4A2A10;color:#F3E3C3;margin:6px 0}
+.sync{font-size:10px;color:var(--dim);text-align:center;margin-top:6px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(function(){
+const AR = n => String(n);
+const dayKey = (d = new Date()) => new Date(d.getTime() - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
+const shift = (k, n) => new Date(Date.parse(k) + n * 864e5).toISOString().slice(0, 10);
+const diff = (a, b) => Math.round((Date.parse(a) - Date.parse(b)) / 864e5);
+const ICON = {
+  back: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>',
+  home: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20h18M5 20V10l7-6 7 6v10M10 20v-5h4v5"/></svg>',
+  shield: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg>',
+  gate: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V8l4-2v3l4-3 4 3V6l4 2v13z"/><path d="M10 21v-5a2 2 0 0 1 4 0v5"/></svg>',
+  map: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/></svg>',
+  book: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1-2-2z"/><path d="M8 7h6M8 11h6"/></svg>',
+  fire: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E07A3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2c1 4 5 6 5 11a5 5 0 0 1-10 0c0-3 2-4 2-7 2 1 3 2 3 4"/></svg>',
+  moon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>'
+};
+
+/* ---------- static content ---------- */
+const PIECES = [
+  { id: 'helmet', g: 'خ', name: 'الخوذة', deed: 'غض البصر', desc: 'تحمي العين، وهي أوسع أبواب الشيطان. كلما غضضتَ بصرك يومًا ازدادت الخوذة صلابة.', tasks: [{ id: 'gaze', t: 'يومٌ كامل بلا نظرة محرّمة' }] },
+  { id: 'chest', g: 'ص', name: 'درع الصدر', deed: 'الصلاة في وقتها', desc: 'أمتن قطع الدرع؛ فالصلاة تنهى عن الفحشاء والمنكر، وتأخيرها يترك في الصدر ثغرة.', tasks: [{ id: 'fajr', t: 'الفجر في وقتها' }, { id: 'dhuhr', t: 'الظهر' }, { id: 'asr', t: 'العصر' }, { id: 'maghrib', t: 'المغرب' }, { id: 'isha', t: 'العشاء' }] },
+  { id: 'shield', g: 'ت', name: 'الترس', deed: 'الأذكار', desc: 'يردّ الوساوس قبل أن تبلغك؛ فالذكر حصنٌ حصين، ومن دونه يتشقق الترس.', tasks: [{ id: 'am', t: 'أذكار الصباح' }, { id: 'pm', t: 'أذكار المساء' }] },
+  { id: 'sword', g: 'س', name: 'السيف', deed: 'ورد القرآن', desc: 'سلاحك الذي تهاجم به؛ كلما زاد وردك ازداد السيف حدّة.', tasks: [{ id: 'quran', t: 'ورد القرآن اليومي' }] },
+  { id: 'horse', g: 'ج', name: 'الجواد', deed: 'الصيام والرياضة', desc: 'قوة البدن تحمل الروح؛ فالصيام يكسر الشهوة، والرياضة تصرف الطاقة في وجهها الصحيح.', tasks: [{ id: 'body', t: 'رياضة أو صيام' }] },
+  { id: 'banner', g: 'ر', name: 'الراية', deed: 'الرفقة وصلة الرحم', desc: 'الفارس وحده يسقط، والراية تجمعك بمن يعينك على الطريق.', tasks: [{ id: 'rahim', t: 'صلة رحم أو مجلس خير' }] }
+];
+const ALLTASKS = PIECES.reduce((a, p) => a.concat(p.tasks), []);
+const DOORS = [
+  { name: 'اللحظات', what: 'النظر', guard: 'غض البصر', q: 'هل حفظتَ بصرك اليوم؟', desc: 'النظرة رائدُ الشهوة؛ فمن أطلق بصره أورد قلبه موارد الهلاك. احرس هذا الباب أولًا.' },
+  { name: 'الخطرات', what: 'الأفكار', guard: 'الذكر والاستعاذة', q: 'هل دفعتَ الخواطر في أولها؟', desc: 'مبدأ كل عمل خاطرة؛ فادفعها في أولها قبل أن تصير فكرة ثم شهوة ثم عزيمة.' },
+  { name: 'اللفظات', what: 'الكلام', guard: 'الصمت إلا بخير', q: 'هل سلِم الناس من لسانك؟', desc: 'احفظ لسانك من الغيبة واللغو؛ فلا تتكلم إلا بما ترجو فيه نفعًا.' },
+  { name: 'الخطوات', what: 'الأفعال', guard: 'المحاسبة', q: 'هل مشيتَ إلى ما يرضي الله؟', desc: 'لا تنقل قدمك إلا إلى ما ترجو ثوابه، ولا تقترب من موضعٍ تعلم أنه موضع فتنة.' }
+];
+const STAGES = ['خطرة', 'فكرة', 'شهوة', 'عزيمة', 'فعل', 'عادة'];
+const STAGE_XP = [40, 30, 20, 20, 10, 10];
+const ENEMIES = ['سهم النظرة', 'وسوسة الخاطر', 'زلّة اللسان', 'خطوة الفتنة', 'عدو الخلوة'];
+const KH = 4;
+const EXERCISES = ['20 ضغطة', '30 قرفصاء (سكوات)', 'دقيقة بلانك', '50 قفزة في المكان', 'اصعد السلم وانزل مرتين', '20 طعنة (لانجز)', 'دقيقة جري في المكان'];
+const MOVES_KH = ['أعوذ بالله من الشيطان الرجيم', 'اخرج من الغرفة فورًا', 'أبعِد الهاتف عنك', 'قُم فتوضّأ', 'شغّل القرآن أو اتصل بأحد'];
+const ENEMY_AYAH = ['﴿قُل لِّلْمُؤْمِنِينَ يَغُضُّوا مِنْ أَبْصَارِهِمْ﴾', '﴿وَإِمَّا يَنزَغَنَّكَ مِنَ الشَّيْطَانِ نَزْغٌ فَاسْتَعِذْ بِاللَّهِ﴾', '﴿مَّا يَلْفِظُ مِن قَوْلٍ إِلَّا لَدَيْهِ رَقِيبٌ عَتِيدٌ﴾', '﴿وَلَا تَتَّبِعُوا خُطُوَاتِ الشَّيْطَانِ﴾', '﴿يَسْتَخْفُونَ مِنَ النَّاسِ وَلَا يَسْتَخْفُونَ مِنَ اللَّهِ وَهُوَ مَعَهُمْ﴾'];
+const MOVES = ['أعوذ بالله من الشيطان الرجيم', 'غيّر مكانك وقُم من موضعك', 'قُم فتوضّأ', 'اشغل نفسك بعمل نافع فورًا'];
+const TIMES = ['الفجر', 'الضحى', 'الظهر', 'العصر', 'المغرب', 'آخر الليل'];
+const TIME_TIPS = ['السلاح: النوم مبكرًا والقيام للفجر', 'السلاح: عمل مخطّط لا فراغ فيه', 'السلاح: الصلاة في المسجد', 'السلاح: ورد بعد العصر', 'السلاح: أذكار المساء والصحبة', 'السلاح: الهاتف خارج الغرفة'];
+const hourBucket = h => h >= 3 && h < 6 ? 0 : h < 12 && h >= 6 ? 1 : h >= 12 && h < 15 ? 2 : h >= 15 && h < 18 ? 3 : h >= 18 && h < 21 ? 4 : 5;
+const LEVELS = [
+  { name: 'الكفر', boss: 'سور التوحيد', desc: 'أول ما يطلبه الشيطان من العبد؛ فإن ثبت عليه انتقل إلى العقبة التي تليها.', weapon: 'تجديد التوحيد' },
+  { name: 'البدعة', boss: 'سور السُّنّة', desc: 'فإن عجز عن الأولى، دخل عليه بعبادة على غير هدي النبي ﷺ.', weapon: 'اتّباع السنة' },
+  { name: 'الكبائر', boss: 'قلعة الكبائر', desc: 'يزيّن الذنب العظيم، ويُمنّيه بسعة المغفرة دون توبة.', weapon: 'الجمع بين الخوف والرجاء' },
+  { name: 'الصغائر', boss: 'جيش الصغائر', desc: 'يهوّنها في عينه حتى تجتمع عليه فتهلكه، ومنها النظرة.', weapon: 'غض البصر والاستغفار' },
+  { name: 'المباحات', boss: 'متاهة المباحات', desc: 'يشغله بالإكثار من المباح حتى يضيع وقته وتفوته الدرجات.', weapon: 'وردٌ يومي ثابت' },
+  { name: 'المفضول', boss: 'فخّ العمل المفضول', desc: 'يشغله بعمل صالح عمّا هو أفضل منه وأحبّ إلى الله.', weapon: 'فقه الأولويات' },
+  { name: 'الأذى', boss: 'حرب الجنود', desc: 'فإن عجز عن ذلك كله، سلّط عليه أذى الخلق ليشغل قلبه.', weapon: 'الصبر' }
+];
+const RANKS = [
+  { name: 'مبتدئ', days: 0, gift: 'لثام وثوب مرقّع' },
+  { name: 'حارس', days: 7, gift: 'قلنسوة وستار زرد' },
+  { name: 'مُرابِط', days: 30, gift: 'خوذة حديدية وترس خشبي' },
+  { name: 'فارس', days: 90, gift: 'درع منقوش وعباءة الفرسان' },
+  { name: 'مُجاهِد', days: 240, gift: 'الدرع البرونزي والترس الذهبي' }
+];
+const WISDOM = [
+  { at: 1, title: 'سلسلة الخواطر', text: 'دافِعِ الخطرة، فإن لم تفعل صارت فكرة، فدافِعِ الفكرة، فإن لم تفعل صارت شهوة، فحاربها، فإن لم تفعل صارت عزيمةً وهمّة، فإن لم تدافعها صارت فعلًا، فإن لم تتداركه بضدّه صار عادة، فيصعب عليك الانتقال عنها.', src: 'ابن القيم — «الفوائد»' },
+  { at: 3, title: 'الأبواب الأربعة', text: 'أكثر ما تدخل المعاصي على العبد من هذه الأبواب الأربعة: اللحظات، والخطرات، واللفظات، والخطوات.', src: 'ابن القيم — «الجواب الكافي»' },
+  { at: 7, title: 'الحصن الحصين', text: '«وآمركم أن تذكروا الله، فإن مثل ذلك كمثل رجلٍ خرج العدو في أثره سراعًا، حتى إذا أتى على حصنٍ حصين فأحرز نفسه منهم، كذلك العبد لا يُحرز نفسه من الشيطان إلا بذكر الله.»', src: 'رواه الترمذي — وشرحه ابن القيم في «الوابل الصيب»' },
+  { at: 15, title: 'يقظة المتقين', text: '﴿إِنَّ الَّذِينَ اتَّقَوْا إِذَا مَسَّهُمْ طَائِفٌ مِّنَ الشَّيْطَانِ تَذَكَّرُوا فَإِذَا هُم مُّبْصِرُونَ﴾', src: 'سورة الأعراف — 201' },
+  { at: 30, title: 'العدوّ المبين', text: '﴿إِنَّ الشَّيْطَانَ لَكُمْ عَدُوٌّ فَاتَّخِذُوهُ عَدُوًّا﴾', src: 'سورة فاطر — 6' },
+  { at: 50, title: 'نهي النفس عن الهوى', text: '﴿وَأَمَّا مَنْ خَافَ مَقَامَ رَبِّهِ وَنَهَى النَّفْسَ عَنِ الْهَوَىٰ ۝ فَإِنَّ الْجَنَّةَ هِيَ الْمَأْوَىٰ﴾', src: 'سورة النازعات — 40–41' },
+  { at: 80, title: 'وعد المجاهدين', text: '﴿وَالَّذِينَ جَاهَدُوا فِينَا لَنَهْدِيَنَّهُمْ سُبُلَنَا ۚ وَإِنَّ اللَّهَ لَمَعَ الْمُحْسِنِينَ﴾', src: 'سورة العنكبوت — 69' }
+];
+const REPAIR = [
+  { t: 'الاستغفار', d: 'قل: أستغفر الله وأتوب إليه — مئة مرة' },
+  { t: 'الوضوء وركعتان', d: 'توضّأ فأحسِن الوضوء، ثم صلِّ ركعتين' },
+  { t: 'حسنة تمحو', d: 'صدقة، أو صفحة من القرآن، أو برّ بأحد' }
+];
+
+/* ---------- hijri seasons ---------- */
+let HF = null;
+try { HF = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn', { day: 'numeric', month: 'numeric' }); } catch (e) { HF = null; }
+function hijri(date) {
+  if (!HF) return null;
+  try { const p = HF.formatToParts(date); return { m: +p.find(x => x.type === 'month').value, d: +p.find(x => x.type === 'day').value }; } catch (e) { return null; }
+}
+const SEASONS = [
+  { name: 'الأيام البيض', when: 'الثالث عشر والرابع عشر والخامس عشر من كل شهر هجري', gift: 'ترس البدر', quest: 'صيام الأيام الثلاثة', match: h => h.d >= 13 && h.d <= 15 },
+  { name: 'رمضان', when: 'شهر رمضان كاملًا', gift: 'درع الصائم', quest: 'صيام الشهر، وختمة، وقيام الليالي العشر', match: h => h.m === 9 },
+  { name: 'العشر من ذي الحجة', when: 'من الأول إلى العاشر من ذي الحجة', gift: 'راية العشر', quest: 'التكبير، وصيام ما تيسّر، والإكثار من العمل الصالح', match: h => h.m === 12 && h.d <= 10 },
+  { name: 'يوم عرفة', when: 'التاسع من ذي الحجة', gift: 'خوذة عرفة', quest: 'صيامه لغير الحاج، والإكثار من الدعاء', match: h => h.m === 12 && h.d === 9 },
+  { name: 'عاشوراء', when: 'التاسع والعاشر من المحرّم', gift: 'ترس النجاة', quest: 'صيام التاسع والعاشر من المحرّم', match: h => h.m === 1 && (h.d === 9 || h.d === 10) }
+];
+function seasonsNow(date = new Date()) { const h = hijri(date); return h ? SEASONS.filter(s => s.match(h)) : []; }
+const SCACHE = {};
+function seasonIn(s) {
+  const key = dayKey() + s.name;
+  if (key in SCACHE) return SCACHE[key];
+  return (SCACHE[key] = seasonScan(s));
+}
+function seasonScan(s) {
+  for (let i = 1; i < 400; i++) { const h = hijri(new Date(Date.now() + i * 864e5)); if (h && s.match(h)) return i; }
+  return null;
+}
+
+/* ---------- state ---------- */
+function blank() { const p = {}; PIECES.forEach(x => p[x.id] = { x: 0, last: null }); return { v: 1, created: dayKey(), pieces: p, days: {}, attacks: [], best: 0, updated: 0 }; }
+function load() { try { const s = JSON.parse(localStorage.getItem('murabit')); if (s && s.v) return s; } catch (e) {} return blank(); }
+let S = load();
+let dbRef = null, saveT = null, synced = false;
+function save() {
+  S.best = Math.max(S.best || 0, streak());
+  S.chasteBest = Math.max(S.chasteBest || 0, chasteDays());
+  syncRank();
+  S.updated = Date.now();
+  try { localStorage.setItem('murabit', JSON.stringify(S)); } catch (e) {}
+  if (dbRef) { clearTimeout(saveT); saveT = setTimeout(() => { try { Promise.resolve(dbRef.set(JSON.parse(JSON.stringify(S)))).catch(() => {}); } catch (e) {} }, 1200); }
+}
+(async () => {
+  try {
+    if (!window.claude || !window.claude.use) return;
+    const db = await window.claude.use('db'); const u = await window.claude.use('user');
+    if (!db || !u) return;
+    const id = await u.id(); if (!id) return;
+    const ref = db.doc('data/users/' + id + '/murabit');
+    let remote = null;
+    try { const snap = await ref.get(); remote = snap && (typeof snap.data === 'function' ? snap.data() : (snap.data !== undefined ? snap.data : snap)); } catch (e) { remote = null; }
+    dbRef = ref; synced = true;
+    if (remote && remote.v && (remote.updated || 0) > (S.updated || 0)) { S = JSON.parse(JSON.stringify(remote)); try { localStorage.setItem('murabit', JSON.stringify(S)); } catch (e) {} }
+    else save();
+    render();
+  } catch (e) {}
+})();
+
+const today = () => dayKey();
+function day(k = today()) {
+  if (!S.days[k]) S.days[k] = { done: {}, bonus: 0, season: seasonsNow().length > 0 };
+  return S.days[k];
+}
+function dayXP(d) { const n = Object.values(d.done || {}).filter(Boolean).length; return n * 10 * (d.done && d.done.fajr ? 2 : 1) * (d.season ? 2 : 1) + (d.bonus || 0); }
+const totalXP = () => Object.values(S.days).reduce((a, d) => a + dayXP(d), 0);
+const pieceDone = (p, k = today()) => p.tasks.every(t => S.days[k] && S.days[k].done[t.id]);
+const pieceLevel = id => Math.min(10, 1 + Math.floor((S.pieces[id].x || 0) / 3));
+function pstate(id) {
+  const g = diff(today(), S.pieces[id].last || S.created);
+  if (S.pieces[id].last === today()) return 0;
+  return g <= 1 ? 1 : g === 2 ? 2 : g <= 5 ? 3 : 4;
+}
+const rusty = id => pstate(id) >= 3;
+const PSTATE = [
+  { name: 'سليمة — مصقولة اليوم', c: 'var(--gold2)', f: 'none' },
+  { name: 'سليمة', c: 'var(--gold)', f: 'none' },
+  { name: 'مخدوشة — فاتك يوم', c: 'var(--tan)', f: 'brightness(.82) saturate(.7)' },
+  { name: 'صدئة — تحتاج إلى ترميم', c: 'var(--rust)', f: 'sepia(1) saturate(2.6) hue-rotate(-28deg) brightness(.72)' },
+  { name: 'مكسورة — أهملتها طويلًا', c: 'var(--dim)', f: 'grayscale(1) brightness(.5) contrast(1.25)' }
+];
+const SCRATCH = '<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M22 30 L48 46 L70 52" fill="none" stroke="rgba(255,240,215,.55)" stroke-width="1.4"/><path d="M23 31.5 L49 47.5 L71 53.5" fill="none" stroke="rgba(0,0,0,.6)" stroke-width="1.1"/></svg>';
+const CRACK = '<svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M50 4 L46 22 L55 34 L44 50 L52 63 L41 80 L47 96" stroke="#050403" stroke-width="3"/><path d="M55 34 L72 40 L84 36 M44 50 L28 56 L16 52 M52 63 L66 72 M46 22 L33 17" stroke="#050403" stroke-width="2"/><path d="M51 4 L47 22 L56 34 L45 50 L53 63 L42 80 L48 96" stroke="rgba(230,210,180,.35)" stroke-width="1"/></g></svg>';
+function iconHTML(id, size) {
+  const st = pstate(id), m = `-webkit-mask-image:url(icons/${id}.png);mask-image:url(icons/${id}.png)`;
+  const over = st === 0 ? `<i class="mk shine" style="${m}"></i>` : st === 2 ? `<i class="mk" style="${m}">${SCRATCH}</i>` : st === 3 ? `<i class="mk rustspots" style="${m}"></i>` : st === 4 ? `<i class="mk" style="${m}">${CRACK}</i>` : '';
+  return `<span class="pi" style="width:${size}px;height:${size}px;${st === 4 ? 'transform:rotate(-9deg) translateY(3px)' : ''}"><img src="icons/${id}.png" alt="" style="filter:${PSTATE[st].f}">${over}</span>`;
+}
+function integrity() {
+  const W = [0, 0, .25, .6, 1]; const dmg = PIECES.reduce((t, p) => t + W[pstate(p.id)], 0);
+  const d = S.days[today()]; const n = d ? ALLTASKS.filter(t => d.done[t.id]).length : 0;
+  return Math.round(60 * (6 - dmg) / 6 + 40 * n / ALLTASKS.length);
+}
+const okDay = k => { const d = S.days[k]; return !!(d && ((d.night && d.night.ok) || d.repaired)); };
+function streak() { let k = today(), s = 0; if (!okDay(k)) k = shift(k, -1); while (okDay(k)) { s++; k = shift(k, -1); } return s; }
+function lastFallKey() {
+  let k = null;
+  S.attacks.forEach(a => { if (a.door === KH && !a.held) { const d = dayKey(new Date(a.ts)); if (!k || d > k) k = d; } });
+  Object.entries(S.days).forEach(([d, v]) => { if (v.night && v.night.k === 'f' && (!k || d > k)) k = d; });
+  return k;
+}
+function chasteDays() { const k = lastFallKey(); return Math.max(0, diff(today(), k || S.created)); }
+const held = () => S.attacks.filter(a => a.held).length;
+const DECAY_DAYS = 7;
+const rankFor = n => { let r = 0; RANKS.forEach((x, i) => { if (n >= x.days) r = i; }); return r; };
+function lastOkDay() { let k = today(); for (let i = 0; i < 500; i++) { if (okDay(k)) return k; if (k <= S.created) break; k = shift(k, -1); } return S.created; }
+function missedDays() { return Math.max(0, diff(today(), lastOkDay()) - 1); }
+function syncRank() {
+  if (typeof S.rank !== 'number') S.rank = rankFor(Math.max(S.best || 0, streak()));
+  S.rank = Math.max(S.rank, rankFor(streak()));
+  const from = lastOkDay(), drops = Math.floor(missedDays() / DECAY_DAYS);
+  if (!S.decay || S.decay.from !== from) S.decay = { from: from, n: 0 };
+  if (drops > S.decay.n) {
+    const before = S.rank; S.rank = Math.max(0, S.rank - (drops - S.decay.n)); S.decay.n = drops;
+    if (S.rank < before) { pendingToast = 'نزلت رتبتك إلى ' + RANKS[S.rank].name + ' — عُد إلى الرباط'; }
+  }
+}
+let pendingToast = null;
+const rankIdx = () => (typeof S.rank === 'number' ? S.rank : rankFor(Math.max(S.best || 0, streak())));
+const levelIdx = () => Math.min(6, 3 + Math.floor(Math.max(S.best || 0, streak()) / 40));
+
+function toggleTask(id) {
+  const d = day(); d.done[id] = !d.done[id];
+  const p = PIECES.find(p => p.tasks.some(t => t.id === id)); const st = S.pieces[p.id]; const k = today();
+  if (pieceDone(p) && st.last !== k) { st.prev = st.last; st.last = k; st.x = (st.x || 0) + 1; }
+  else if (!pieceDone(p) && st.last === k) { st.last = st.prev || null; st.x = Math.max(0, (st.x || 0) - 1); }
+  save();
+}
+
+/* ---------- UI state ---------- */
+let introOn = true;
+let selPiece = 0, selDoor = 0, selLevel = null, selScroll = 0, fort = null, timer = null, nightDraft = null, resetArm = false;
+function toast(msg) { const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2200); }
+const head = (title, sub) => `<header class="hdr"><a class="back" href="#home" aria-label="العودة إلى المعسكر">${ICON.back}</a><div><h1>${title}</h1>${sub ? `<small>${sub}</small>` : ''}</div><div style="width:44px"></div></header>`;
+function nav(r) {
+  const items = [['home', 'المعسكر', ICON.home], ['armory', 'الترسانة', ICON.shield], ['doors', 'الأبواب', ICON.gate], ['gates', 'الثغور', ICON.map], ['wisdom', 'الحكمة', ICON.book]];
+  return `<nav>${items.map(([h, l, i]) => `<a href="#${h}" class="${r === h ? 'on' : ''}">${i}${l}</a>`).join('')}</nav>`;
+}
+function taskRow(t) { const on = S.days[today()] && S.days[today()].done[t.id]; const row = `<button class="row ${on ? 'on' : ''}" data-act="task" data-arg="${t.id}"><span class="chk">${on ? '✓' : ''}</span><span style="flex:1">${t.t}</span></button>`; return ADHKAR[t.id] ? `<div class="rowwrap">${row}<a class="readbtn" href="#adhkar-${t.id}">اقرأها</a></div>` : row; }
+
+/* ---------- prayer times ---------- */
+const CITIES = [
+  { n: 'القاهرة', lat: 30.0444, lng: 31.2357, m: 'eg' }, { n: 'الجيزة', lat: 30.0131, lng: 31.2089, m: 'eg' },
+  { n: 'السادس من أكتوبر', lat: 29.9285, lng: 30.9188, m: 'eg' }, { n: 'الإسكندرية', lat: 31.2001, lng: 29.9187, m: 'eg' },
+  { n: 'المنصورة', lat: 31.0409, lng: 31.3785, m: 'eg' }, { n: 'طنطا', lat: 30.7865, lng: 31.0004, m: 'eg' },
+  { n: 'أسيوط', lat: 27.1809, lng: 31.1837, m: 'eg' }, { n: 'الأقصر', lat: 25.6872, lng: 32.6396, m: 'eg' },
+  { n: 'الرياض', lat: 24.7136, lng: 46.6753, m: 'uq' }, { n: 'جدة', lat: 21.4858, lng: 39.1925, m: 'uq' },
+  { n: 'مكة المكرمة', lat: 21.3891, lng: 39.8579, m: 'uq' }, { n: 'المدينة المنورة', lat: 24.5247, lng: 39.5692, m: 'uq' }
+];
+const PRAYERS = [['fajr', 'الفجر'], ['dhuhr', 'الظهر'], ['asr', 'العصر'], ['maghrib', 'المغرب'], ['isha', 'العشاء']];
+const rad = d => d * Math.PI / 180, deg = r => r * 180 / Math.PI, fixA = (a, b) => { a = a - b * Math.floor(a / b); return a < 0 ? a + b : a; };
+function prayerTimes(k = today()) {
+  const c = CITIES[S.city || 0]; const [y, mo, d] = k.split('-').map(Number);
+  const jd = Date.UTC(y, mo - 1, d) / 864e5 + 2440587.5 + 0.5 - c.lng / 360, D = jd - 2451545;
+  const g = fixA(357.529 + 0.98560028 * D, 360), q = fixA(280.459 + 0.98564736 * D, 360);
+  const L = fixA(q + 1.915 * Math.sin(rad(g)) + 0.02 * Math.sin(rad(2 * g)), 360), e = 23.439 - 0.00000036 * D;
+  const RA = fixA(deg(Math.atan2(Math.cos(rad(e)) * Math.sin(rad(L)), Math.cos(rad(L)))) / 15, 24);
+  const decl = deg(Math.asin(Math.sin(rad(e)) * Math.sin(rad(L)))); let E = q / 15 - RA; if (E > 12) E -= 24; if (E < -12) E += 24;
+  const noon = 12 - c.lng / 15 - E, lat = c.lat;
+  const T = a => deg(Math.acos((-Math.sin(rad(a)) - Math.sin(rad(decl)) * Math.sin(rad(lat))) / (Math.cos(rad(decl)) * Math.cos(rad(lat))))) / 15;
+  const asrA = -deg(Math.atan(1 / (1 + Math.tan(rad(Math.abs(lat - decl))))));
+  const h = { fajr: noon - T(c.m === 'uq' ? 18.5 : 19.5), sunrise: noon - T(0.833), dhuhr: noon + 2 / 60, asr: noon + T(asrA), maghrib: noon + T(0.833) };
+  h.isha = c.m === 'uq' ? h.maghrib + 1.5 : noon + T(17.5);
+  const base = Date.UTC(y, mo - 1, d), out = {};
+  Object.keys(h).forEach(x => { out[x] = new Date(base + Math.round(h[x] * 60) * 6e4); });
+  return out;
+}
+const fmtT = d => AR(d.toLocaleTimeString('en-GB', { hour: 'numeric', minute: '2-digit', hour12: true }).replace(/\s?am/i, ' ص').replace(/\s?pm/i, ' م'));
+function prayerState() {
+  const t = prayerTimes(), now = new Date(), d = S.days[today()] || { done: {} };
+  const ends = { fajr: t.sunrise, dhuhr: t.asr, asr: t.maghrib, maghrib: t.isha, isha: new Date(prayerTimes(shift(today(), 1)).fajr) };
+  const list = PRAYERS.map(([id, n]) => {
+    const done = !!d.done[id], open = now >= t[id] && now < ends[id];
+    return { id, n, at: t[id], done, open, missed: !done && now >= ends[id], wait: now < t[id] };
+  });
+  let next = list.find(p => p.wait);
+  const nx = next ? { n: next.n, at: next.at } : { n: 'الفجر', at: prayerTimes(shift(today(), 1)).fajr };
+  return { list, next: nx };
+}
+function untilTxt(at) { const m = Math.max(0, Math.round((at - new Date()) / 6e4)); const h = Math.floor(m / 60), r = m % 60; return h ? AR(h) + ' س ' + AR(r) + ' د' : AR(r) + ' دقيقة'; }
+function prayerCard() {
+  const open = !!S.ptOpen;
+  const head = `<button type="button" data-act="ptoggle" aria-expanded="${open}" style="width:100%;display:flex;justify-content:space-between;align-items:center;gap:8px;background:none;border:0;padding:0;min-height:44px;text-align:right"><span class="kufi" style="font-size:18px;color:var(--gold2)">مواقيت الصلاة</span><span style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid var(--line);color:var(--gold);transition:transform .25s;transform:rotate(${open ? 180 : 0}deg)" aria-label="${open ? 'إخفاء' : 'إظهار'}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></button>`;
+  if (!open) return `<section class="card" style="margin:16px 18px 0;border-color:var(--bronze);padding:6px 14px">${head}</section>`;
+  const ps = prayerState(), cur = ps.list.find(p => p.open && !p.done);
+  return `<section class="card" style="margin:16px 18px 0;border-color:var(--bronze);padding:6px 14px 14px">${head}
+    <div style="display:flex;justify-content:flex-end;margin-top:4px"><label style="display:flex;align-items:center;gap:6px;font-size:12px" class="muted">المدينة <select data-act="city" style="background:#1A1610;color:var(--text);border:1px solid var(--line);font-family:inherit;font-size:12px;min-height:36px;padding:0 6px">${CITIES.map((c, i) => `<option value="${i}" ${i === (S.city || 0) ? 'selected' : ''}>${c.n}</option>`).join('')}</select></label></div>
+    ${cur ? `<div style="margin-top:10px;padding:10px 12px;background:#3E3018;border:1px solid var(--gold);display:flex;justify-content:space-between;align-items:center"><b style="color:var(--gold2)">حان وقت ${cur.n}</b><button class="chip on" data-act="task" data-arg="${cur.id}">صلّيتُها</button></div>` : ''}
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:10px"><span class="muted" style="font-size:13px">القادمة: <b style="color:var(--text)">${ps.next.n}</b></span><b id="ptnext" class="kufi" style="font-size:22px;color:var(--gold2)">بعد ${untilTxt(ps.next.at)}</b></div>
+    <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;margin-top:10px">${ps.list.map(p => `<div style="text-align:center;padding:8px 0;border:1px solid ${p.open && !p.done ? 'var(--gold)' : p.missed ? '#8E2B1F' : 'var(--line)'};background:${p.done ? '#1E1810' : 'transparent'}"><div style="font-size:12px;font-weight:700;color:${p.done ? 'var(--gold2)' : p.missed ? 'var(--rust)' : 'var(--text)'}">${p.n}</div><div style="font-size:11px" class="muted">${fmtT(p.at)}</div><div style="font-size:10px;font-weight:700;color:${p.done ? 'var(--tan)' : p.missed ? 'var(--rust)' : 'var(--dim)'}">${p.done ? '✓ أُدّيت' : p.missed ? 'فاتت' : p.open ? 'وقتها الآن' : '—'}</div></div>`).join('')}</div>
+  </section>`;
+}
+
+/* ---------- adhkar (Hisn al-Muslim) ---------- */
+const BASMALA = 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ';
+const ADHKAR_COMMON = [
+  { t: 'أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ — اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ', n: 1, src: 'آية الكرسي' },
+  { t: BASMALA + ' — قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ', n: 3, src: 'سورة الإخلاص' },
+  { t: BASMALA + ' — قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِن شَرِّ مَا خَلَقَ ۝ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ۝ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ', n: 3, src: 'سورة الفلق' },
+  { t: BASMALA + ' — قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۝ مَلِكِ النَّاسِ ۝ إِلَٰهِ النَّاسِ ۝ مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ۝ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ۝ مِنَ الْجِنَّةِ وَالنَّاسِ', n: 3, src: 'سورة الناس' }
+];
+const ADHKAR = {
+  am: { title: 'أذكار الصباح', items: ADHKAR_COMMON.concat([
+    { t: 'أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذَا الْيَوْمِ وَخَيْرَ مَا بَعْدَهُ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذَا الْيَوْمِ وَشَرِّ مَا بَعْدَهُ، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ', n: 1 },
+    { t: 'اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ النُّشُورُ', n: 1 }
+  ]) },
+  pm: { title: 'أذكار المساء', items: ADHKAR_COMMON.concat([
+    { t: 'أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذِهِ اللَّيْلَةِ وَخَيْرَ مَا بَعْدَهَا، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذِهِ اللَّيْلَةِ وَشَرِّ مَا بَعْدَهَا، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ', n: 1 },
+    { t: 'اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ الْمَصِيرُ', n: 1 }
+  ]) }
+};
+const ADHKAR_TAIL = [
+  { t: 'اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ', n: 1, src: 'سيّد الاستغفار' },
+  { t: 'اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَهَ إِلَّا أَنْتَ', n: 3 },
+  { t: 'بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ', n: 3 },
+  { t: 'رَضِيتُ بِاللَّهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ ﷺ نَبِيًّا', n: 3 },
+  { t: 'يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ، أَصْلِحْ لِي شَأْنِي كُلَّهُ، وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ', n: 1 },
+  { t: 'حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ، عَلَيْهِ تَوَكَّلْتُ، وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ', n: 7 },
+  { t: 'لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ', n: 10 },
+  { t: 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ', n: 100 }
+];
+ADHKAR.am.items = ADHKAR.am.items.concat(ADHKAR_TAIL);
+ADHKAR.pm.items = ADHKAR.pm.items.concat([{ t: 'أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ', n: 3 }]).concat(ADHKAR_TAIL);
+
+/* ---------- views ---------- */
+const V = {};
+V.home = () => {
+  const xp = totalXP(), lvl = Math.floor(xp / 400) + 1, into = xp % 400, integ = integrity(), r = rankIdx(), now = seasonsNow();
+  const d = S.days[today()]; const fajr = d && d.done.fajr;
+  const nextS = now.length ? null : SEASONS.map(s => ({ s, n: seasonIn(s) })).filter(x => x.n).sort((a, b) => a.n - b.n)[0];
+  const nightDone = d && d.night;
+  return `
+  <div style="position:relative;height:430px;background:#070605;overflow:hidden">
+    <div style="position:absolute;inset:0;background:url(rank${r + 1}.jpg) center 22%/cover;filter:${integ < 40 ? 'grayscale(.6) brightness(.55) contrast(1.15)' : integ < 70 ? 'sepia(.55) saturate(1.3) hue-rotate(-12deg) brightness(.72)' : 'none'}"></div>
+    <div style="position:absolute;inset:0;background:${integ < 40 ? 'radial-gradient(ellipse at 50% 45%,transparent 35%,rgba(110,20,10,.75) 100%)' : integ < 70 ? 'linear-gradient(180deg,rgba(120,45,15,.15),rgba(120,45,15,.35))' : 'radial-gradient(ellipse at 50% 30%,rgba(240,212,154,.12),transparent 60%)'}"></div>
+    ${integ < 40 ? '<svg viewBox="0 0 300 420" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M150 0 L140 60 L162 110 L135 170 L158 230 L128 300 L146 420" stroke="#050403" stroke-width="4"/><path d="M162 110 L210 128 L250 116 M135 170 L90 186 L52 176 M158 230 L200 262 L226 300 M140 60 L104 46 M128 300 L96 330" stroke="#050403" stroke-width="2.5"/><path d="M152 0 L142 60 L164 110 L137 170 L160 230 L130 300 L148 420" stroke="rgba(230,210,180,.3)" stroke-width="1.2"/></g></svg>' : ''}
+    <a href="#ranks" aria-label="الشخصيات والرتب" style="position:absolute;left:0;right:0;top:250px;bottom:0"></a>
+    <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(7,6,5,.85) 0%,rgba(7,6,5,0) 26%,rgba(7,6,5,0) 55%,#0A0907 100%)"></div>
+    <div style="position:relative;display:flex;justify-content:space-between;align-items:center;padding:18px 18px 0">
+      <a href="#ranks" style="text-decoration:none;display:flex;flex-direction:column"><span class="kufi" style="font-size:13px;color:var(--tan)">الرتبة ${AR(r + 1)} من 5</span><span class="kufi" style="font-size:24px;font-weight:700;color:var(--gold2)">${RANKS[r].name}</span></a>
+      <div style="display:flex;align-items:center;gap:8px">
+      <a href="#rules" aria-label="سلسلة الثبات" class="cut" style="text-decoration:none;display:flex;align-items:center;gap:10px;border:1px solid ${streak() ? 'var(--gold)' : 'var(--bronze)'};background:linear-gradient(180deg,rgba(46,32,16,.92),rgba(14,11,8,.92));padding:8px 14px 8px 10px;min-height:56px">
+        <span style="width:40px;height:40px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid ${streak() ? '#E07A3E' : 'var(--line)'};background:${streak() ? 'radial-gradient(circle at 50% 60%,#6A2C0E,#2A1408 70%)' : '#1A1610'};box-shadow:${streak() ? '0 0 14px rgba(224,122,62,.45)' : 'none'}">${streak() ? ICON.fire : ICON.fire.replace('#E07A3E', '#6B5532')}</span>
+        <span style="display:flex;flex-direction:column;line-height:1.15"><b style="font-family:Cairo,sans-serif;font-size:24px;font-weight:800;color:var(--gold2)">${streak()}</b><span style="font-size:11px;color:var(--muted)">${streak() ? 'يوم ثبات' : 'ابدأ الليلة'}</span></span>
+      </a>
+      <button type="button" data-act="lock" aria-label="إغلاق التطبيق" style="width:44px;height:44px;flex:none;display:flex;align-items:center;justify-content:center;border:1px solid var(--bronze);background:rgba(14,11,8,.85);color:var(--gold)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v9"/><path d="M6.3 7.3a8 8 0 1 0 11.4 0"/></svg></button>
+      </div>
+    </div>
+    <div style="position:relative;padding:10px 18px 0">
+      <a href="#levels" style="display:inline-block;text-decoration:none;font-size:12px;color:var(--gold)">العقبة ${AR(levelIdx() + 1)} من 7 — ${LEVELS[levelIdx()].boss}</a>
+      <a href="#xp" aria-label="شرح المستوى" style="display:flex;align-items:center;gap:14px;margin-top:10px;text-decoration:none;color:inherit">
+        <div style="width:46px;height:46px;flex:none;margin:4px;transform:rotate(45deg);border:1px solid var(--gold);background:rgba(20,16,10,.85);display:flex;align-items:center;justify-content:center"><span class="kufi" style="transform:rotate(-45deg);font-size:22px;font-weight:700;color:var(--gold2)">${AR(lvl)}</span></div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:5px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><b style="font-size:14px;color:var(--gold2)">المستوى ${AR(lvl)}</b><span style="font-size:12px;color:var(--soft)">${AR(into)} من 400 خبرة</span></div>
+          <div style="height:8px;background:#1E1912;border:1px solid var(--line)"><div style="height:100%;width:${into / 4}%;background:var(--tan)"></div></div>
+          <span style="font-size:11px;color:var(--muted)">باقي ${AR(400 - into)} خبرة للمستوى ${AR(lvl + 1)} · اضغط للشرح</span>
+        </div>
+      </a>
+    </div>
+    <div style="position:relative;display:flex;gap:8px;margin:12px 18px 0">
+      <div style="flex:1;padding:10px 12px;background:rgba(20,16,10,.85);border:1px solid ${fajr ? 'var(--gold)' : 'var(--bronze)'}"><div style="font-size:12px;font-weight:700;color:var(--gold2)">مهمة الفجر ${fajr ? '— أُنجِزت' : ''}</div><div style="font-size:11px;color:var(--soft)">${fajr ? 'خبرة اليوم مضاعفة ×2' : 'أدِّها في وقتها: خبرة اليوم ×2'}</div></div>
+      <a href="#seasons" style="text-decoration:none;padding:10px 12px;background:rgba(20,16,10,.85);border:1px solid ${now.length ? 'var(--alert)' : 'var(--bronze)'}"><div style="font-size:12px;font-weight:700;color:var(--gold2)">${now.length ? 'موسم الآن' : 'المواسم'}</div><div style="font-size:11px;color:var(--soft)">${now.length ? now[0].name + ' ×2' : (nextS ? nextS.s.name + ' بعد ' + AR(nextS.n) + ' يوم' : 'مواسم الجهاد')}</div></a>
+    </div>
+  </div>
+  ${(() => { const m = missedDays(); if (m < 3 || rankIdx() === 0) return ''; const left = DECAY_DAYS - (m % DECAY_DAYS); return `<div class="pad" style="margin-top:-30px;margin-bottom:40px;position:relative"><div class="card" style="border-color:var(--alert);background:#1C0E0A;font-size:13px;line-height:1.6"><b style="color:var(--alert)">رتبتك في خطر</b> — ${AR(m)} أيام بلا ثبات. تنزل رتبتك بعد ${AR(left)} ${left === 1 ? 'يوم' : 'أيام'} إن لم تعُد.</div></div>`; })()}
+  <div class="pad" style="display:flex;flex-direction:column;gap:12px;margin-top:-30px;position:relative">
+    <div><div style="display:flex;justify-content:space-between;align-items:baseline"><span class="kufi" style="font-size:18px;color:var(--gold2)">سلامة الدرع</span><b style="font-size:22px">${AR(integ)}٪</b></div>
+    <div class="bar" style="margin-top:6px"><div style="width:${integ}%"></div></div></div>
+    <div style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px">
+      ${PIECES.map((p, i) => { const ru = rusty(p.id); return `<a href="#armory" data-act="piece" data-arg="${i}" style="text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 0 6px;background:var(--panel);border:1px solid ${ru ? '#8E2B1F' : 'var(--bronze)'}">${iconHTML(p.id, 40)}<span style="font-size:10px" class="muted">${p.name.replace('درع ', '')}</span></a>`; }).join('')}
+    </div>
+    <div class="card" style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-color:var(--bronze)"><span style="display:flex;flex-direction:column"><b style="font-size:14px;color:var(--gold2)">أيام العفّة</b><span class="muted" style="font-size:11px">${Math.max(S.chasteBest || 0, chasteDays()) ? 'أطولها ' + AR(Math.max(S.chasteBest || 0, chasteDays())) + ' يوم' : 'يبدأ العدّ من اليوم'}</span></span><b class="kufi" style="font-size:${chasteDays() ? 28 : 18}px;color:var(--gold2)">${chasteDays() ? AR(chasteDays()) + ' يوم' : 'اليوم الأول'}</b></div>
+    <a href="#fortress" class="big hex">${ICON.shield} أتعرّض لهجوم</a>
+    <div style="text-align:center;font-size:12px;color:var(--dim);margin-top:-6px">اضغط حين تشعر بهجمة</div>
+  </div>
+  ${prayerCard()}
+  <div class="scrollwrap"><div class="roller" aria-hidden="true"></div>
+    <div class="parch"><h2 class="ptitle kufi">مهام اليوم</h2><div style="display:flex;flex-direction:column">${ALLTASKS.map(taskRow).join('')}</div></div>
+  <div class="roller" aria-hidden="true"></div></div>
+  <div class="pad" style="margin-top:16px"><a href="#night" class="big calm" style="font-size:18px">${ICON.moon} ${nightDone ? 'المحاسبة الليلية — تمت' : 'المحاسبة الليلية'}</a></div>
+  <div class="pad" style="margin-top:10px"><a href="#rules" style="display:flex;align-items:center;justify-content:center;min-height:44px;border:1px solid var(--line);color:var(--muted);text-decoration:none;font-size:13px">قواعد الرباط</a></div>
+  <div class="sync">${synced ? 'تقدّمك محفوظ في حسابك' : 'تقدّمك محفوظ على هذا الجهاز'}</div>`;
+};
+V.armory = () => {
+  const p = PIECES[selPiece], ru = rusty(p.id), lv = pieceLevel(p.id), c = ru ? 'var(--rust)' : 'var(--gold)';
+  return head('الترسانة') + `
+  <section class="card cut" style="margin:16px 18px 0;border-color:var(--bronze);padding:18px;display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;gap:14px;align-items:center">
+      <div class="kufi" style="width:88px;height:88px;flex:none;border:1px solid ${ru ? '#8E2B1F' : 'var(--bronze)'};background:#1A1610;display:flex;align-items:center;justify-content:center;">${iconHTML(p.id, 80)}</div>
+      <div style="display:flex;flex-direction:column;gap:3px"><span class="kufi" style="font-size:24px;font-weight:700;color:var(--gold2)">${p.name}</span><span style="font-size:14px">تُبنى بـ: <b>${p.deed}</b></span><span style="font-size:12px;font-weight:700;color:${PSTATE[pstate(p.id)].c}">${PSTATE[pstate(p.id)].name}</span></div>
+    </div>
+    <p style="margin:0;font-size:14px;line-height:1.7;color:var(--soft)">${p.desc}</p>
+    <div><div style="display:flex;justify-content:space-between;font-size:12px" class="muted"><span>الصلابة</span><span>${AR(lv)} / 10</span></div>
+    <div style="display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:3px;margin-top:6px">${Array.from({ length: 10 }, (_, k) => `<div style="height:10px;background:${k < lv ? (ru ? '#C0503A' : '#C9A86A') : '#2A231A'}"></div>`).join('')}</div></div>
+    <div style="display:flex;flex-direction:column;gap:6px">${p.tasks.map(taskRow).join('')}</div>
+  </section>
+  <h2 class="h2">قطع الدرع</h2>
+  <div class="pad grid3">${PIECES.map((x, i) => { const r2 = rusty(x.id); return `<button data-act="piece" data-arg="${i}" style="height:100px;background:${i === selPiece ? '#221C12' : 'var(--panel)'};border:1px solid ${i === selPiece ? 'var(--gold2)' : (r2 ? '#8E2B1F' : 'var(--line)')};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px">${iconHTML(x.id, 52)}<b style="font-size:13px">${x.name}</b><span class="muted" style="font-size:11px">مستوى ${AR(pieceLevel(x.id))}</span></button>`; }).join('')}</div>
+  <p class="foot">القطعة الصدئة عبادةٌ قصّرتَ فيها يومين، فأعِد إليها بريقها.</p>`;
+};
+V.fortress = () => {
+  if (!fort) fort = { door: 0, stage: 0, left: 60, done: [], won: false };
+  if (fort.ex === undefined) fort.ex = Math.floor(Math.random() * EXERCISES.length);
+  const f = fort;
+  return head('الحصن', 'هجمة جارية') + `
+  <div style="text-align:center;padding:12px 18px 0"><span class="muted" style="font-size:12px">من أي باب يهاجمك؟</span></div>
+  <div class="pad chips" style="justify-content:center;margin-top:6px">${DOORS.map(d => d.name).concat(['الخلوة']).map((nm, i) => `<button class="chip ${f.door === i ? 'on' : ''}" data-act="fdoor" data-arg="${i}">${nm}</button>`).join('')}</div>
+  <div style="text-align:center;padding:12px 18px 0"><div class="kufi" style="font-size:30px;font-weight:700;color:var(--alert)">${ENEMIES[f.door]}</div><div style="font-family:Amiri,serif;font-size:16px;color:var(--soft)">${ENEMY_AYAH[f.door]}</div></div>
+  <div class="pad" style="margin-top:12px"><div style="display:flex;justify-content:space-between;font-size:11px" class="muted"><span>بلغ العدو مرحلة</span><span style="color:var(--gold2);font-weight:700">صُدّه الآن: +${AR(STAGE_XP[f.stage])} خبرة</span></div>
+  <div style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:3px;margin-top:6px">${STAGES.map((s, i) => `<button data-act="fstage" data-arg="${i}" style="height:36px;font-size:11px;font-weight:700;background:${i === f.stage ? '#6E1F16' : (i < f.stage ? '#3A1A12' : 'var(--panel)')};color:${i === f.stage ? '#F6E7C8' : (i < f.stage ? '#E8A08C' : 'var(--dim)')};border:1px solid ${i === f.stage ? 'var(--alert)' : '#2A231A'}">${s}</button>`).join('')}</div></div>
+  <div style="display:flex;justify-content:center;padding:16px 0 6px"><div id="ring" style="width:150px;height:150px;border-radius:50%;border:2px solid var(--bronze);display:flex;align-items:center;justify-content:center;background:conic-gradient(#C9A86A ${Math.round((60 - f.left) * 6)}deg,#1E1912 0deg)"><div style="width:126px;height:126px;border-radius:50%;background:#0C0A08;display:flex;flex-direction:column;align-items:center;justify-content:center"><span id="secs" class="kufi" style="font-size:44px;font-weight:700;color:var(--gold2);line-height:1">${AR(f.left)}</span><span class="muted" style="font-size:12px">ثانية ثبات</span></div></div></div>
+  ${f.won ? `<div class="card" style="margin:8px 18px 0;border-color:var(--gold);text-align:center"><div class="kufi" style="font-size:24px;font-weight:700;color:var(--gold2)">صددتَ الهجمة</div><div style="font-size:14px;color:var(--soft)">+${AR(STAGE_XP[f.stage])} خبرة · ${f.door === KH ? 'أيام عفّتك مستمرة' : 'ازداد باب ' + DOORS[f.door].name + ' تحصينًا'}</div></div><div class="pad" style="margin-top:14px"><a href="#home" class="big calm">العودة إلى المعسكر</a></div>` : `
+  <h2 class="h2" style="margin-top:10px">أسلحتك الآن</h2>
+  <div class="pad" style="display:flex;flex-direction:column;gap:6px">${(() => { const L = (f.door === KH ? MOVES_KH : MOVES).slice(); L.splice(1, 0, 'تمرين الآن: ' + EXERCISES[f.ex]); return L; })().map((m, i) => { const on = f.done.indexOf(i) > -1; return `<button class="row ${on ? 'on' : ''}" data-act="fmove" data-arg="${i}"><span class="chk">${on ? '✓' : ''}</span><span style="flex:1">${m}</span></button>`; }).join('')}</div>
+  <div class="pad" style="margin-top:14px;display:flex;flex-direction:column;gap:6px"><button class="big calm" data-act="fwin">ثبتُّ — انقضت الهجمة</button><button data-act="ffell" style="background:none;border:0;color:var(--muted);font-size:13px;padding:12px">زللت؟ باب التوبة مفتوح — رمّم درعك</button></div>`}`;
+};
+function doorStats(i) {
+  let h = 0, f = 0, week = 0; const wk = Date.now() - 7 * 864e5;
+  S.attacks.forEach(a => { if (a.door !== i) return; a.held ? h++ : f++; if (a.ts > wk) week++; });
+  Object.values(S.days).forEach(d => { if (d.night && d.night.doors) { const v = d.night.doors[i]; if (v === 'h') h++; if (v === 'f') f++; } });
+  return { pct: Math.round(100 * (h + 1) / (h + f + 2)), week };
+}
+V.doors = () => {
+  const st = DOORS.map((_, i) => doorStats(i));
+  const col = p => p < 60 ? 'var(--rust)' : (p < 80 ? 'var(--tan)' : 'var(--ok)');
+  const lab = p => p < 60 ? 'باب ضعيف' : (p < 80 ? 'متماسك' : 'محصّن');
+  const d = DOORS[selDoor], s = st[selDoor];
+  return head('أبواب الحصن', 'مستوحاة من «الجواب الكافي» لابن القيم') + `
+  <p class="p">أكثر ما تدخل المعاصي على العبد من أبوابٍ أربعة. أقِم على كل باب حارسًا، وقوِّه كل يوم.</p>
+  <div class="pad grid2" style="margin-top:14px">${DOORS.map((x, i) => `<button data-act="door" data-arg="${i}" style="height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:${i === selDoor ? '#221C12' : 'var(--panel)'};border:1px solid ${i === selDoor ? 'var(--gold2)' : 'var(--line)'};clip-path:polygon(0 18px,50% 0,100% 18px,100% 100%,0 100%)"><span class="kufi" style="font-size:22px;font-weight:700;color:${col(st[i].pct)}">${x.name}</span><span class="muted" style="font-size:11px">${x.what}</span><span style="width:70%;height:6px;background:#2A231A;display:block"><span style="display:block;height:100%;width:${st[i].pct}%;background:${col(st[i].pct)}"></span></span><span style="font-size:11px;font-weight:700;color:${col(st[i].pct)}">${lab(st[i].pct)}</span></button>`).join('')}</div>
+  <section class="card" style="margin:14px 18px 0;border-color:var(--bronze);display:flex;flex-direction:column;gap:8px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline"><span class="kufi" style="font-size:20px;font-weight:700;color:var(--gold2)">باب ${d.name}</span><span class="muted" style="font-size:12px">الحارس: ${d.guard}</span></div>
+    <p style="margin:0;font-size:13px;line-height:1.7;color:var(--soft)">${d.desc}</p>
+    <div style="border-top:1px dashed var(--line);padding-top:8px;display:flex;justify-content:space-between;font-size:13px"><span class="muted">هجمات هذا الأسبوع</span><b style="color:${col(s.pct)}">${AR(s.week)}</b></div>
+  </section>
+  <div class="pad" style="margin-top:14px"><a href="#fortress" data-act="fdoorgo" data-arg="${selDoor}" class="big" style="font-size:18px">الباب يُطرَق الآن — ادخل الحصن</a></div>`;
+};
+V.gates = () => {
+  const cols = [6, 0, 1, 2, 3, 4, 5]; const grid = TIMES.map(() => [0, 0, 0, 0, 0, 0, 0]); const since = Date.now() - 28 * 864e5;
+  S.attacks.forEach(a => { if (a.ts < since) return; const dt = new Date(a.ts); grid[hourBucket(dt.getHours())][cols.indexOf(dt.getDay())] += a.held ? 1 : 2; });
+  Object.entries(S.days).forEach(([k, d]) => { if (d.night && d.night.t > -1 && Date.parse(k) > since) { grid[d.night.t][cols.indexOf(new Date(Date.parse(k)).getUTCDay())] += 1; } });
+  const pal = v => v === 0 ? '#1A1610' : v <= 2 ? '#5A2A16' : v <= 4 ? '#8E2B1F' : '#C0503A';
+  const totals = grid.map((r, i) => ({ i, n: r.reduce((a, b) => a + b, 0) })).filter(x => x.n > 0).sort((a, b) => b.n - a.n).slice(0, 3);
+  const days = ['سبت', 'أحد', 'إثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة'];
+  return head('خريطة الثغور') + `
+  <p class="p">من أين يأتيك الشيطان؟ كل هجمة تسجّلها في الحصن، وكل محاسبة ليلية، ترسم هذه الخريطة لآخر أربعة أسابيع.</p>
+  <section class="card" style="margin:14px 18px 0"><div class="heat"><span></span>${days.map(d => `<span>${d}</span>`).join('')}${grid.map((r, i) => `<b>${TIMES[i]}</b>${r.map(v => `<i style="background:${pal(v)}"></i>`).join('')}`).join('')}</div>
+  <div style="display:flex;justify-content:flex-end;align-items:center;gap:6px;margin-top:10px;font-size:10px" class="muted"><span>آمن</span>${['#1A1610', '#5A2A16', '#8E2B1F', '#C0503A'].map(c => `<span style="width:14px;height:10px;background:${c};display:inline-block"></span>`).join('')}<span>ثغرة</span></div></section>
+  <h2 class="h2">أضعف ثغورك</h2>
+  <div class="pad" style="display:flex;flex-direction:column;gap:8px">${totals.length ? totals.map((t, j) => `<div class="card" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-right:3px solid ${['#C0503A', '#8E2B1F', '#C9A86A'][j]}"><div style="flex:1"><b style="font-size:14px">${TIMES[t.i]}</b><div class="muted" style="font-size:12px">${TIME_TIPS[t.i]}</div></div><span style="font-size:12px;font-weight:700;color:${['#C0503A', '#E8A08C', '#C9A86A'][j]}">${['ثغرة كبيرة', 'متوسطة', 'خفيفة'][j]}</span></div>`).join('') : '<div class="card muted" style="font-size:13px;text-align:center">لم تُسجَّل هجمات بعد. استعمل زر الحصن وقت الهجمة، وأتمّ المحاسبة الليلية.</div>'}</div>
+  <p class="foot">بياناتك خاصة بك وحدك</p>`;
+};
+V.levels = () => {
+  const cur = levelIdx(); const sel = selLevel === null ? cur : selLevel; const L = LEVELS[sel];
+  return head('العقبات السبع', 'مستوحاة من «بدائع الفوائد» لابن القيم') + `
+  <div class="pad" style="display:flex;flex-direction:column;gap:6px;margin-top:14px">${LEVELS.map((l, i) => { const now = i === cur, lock = i > cur, on = i === sel; return `<button class="row" data-act="level" data-arg="${i}" style="border-color:${on ? 'var(--gold2)' : (now ? '#8E2B1F' : 'var(--line)')};background:${on ? '#221C12' : (now ? '#1C0E0A' : 'var(--panel)')};color:${lock ? 'var(--muted)' : 'var(--text)'}"><span class="kufi" style="width:32px;height:32px;flex:none;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);background:${now ? '#6E1F16' : (lock ? 'transparent' : '#3E3018')};color:${lock ? 'var(--dim)' : '#F6E7C8'};font-weight:700">${AR(i + 1)}</span><span style="flex:1;display:flex;flex-direction:column"><b style="font-size:15px">${l.boss}</b><span class="muted" style="font-size:11px">عقبة ${l.name}</span></span><span style="font-size:11px;font-weight:700;color:${now ? 'var(--alert)' : (lock ? 'var(--dim)' : 'var(--tan)')}">${now ? 'المعركة الحالية' : (lock ? 'مغلقة' : 'سور مثبّت')}</span></button>`; }).join('')}</div>
+  <section class="card cut" style="margin:14px 18px 0;border-color:var(--bronze);display:flex;flex-direction:column;gap:8px">
+    <span class="muted" style="font-size:12px">الخصم</span><span class="kufi" style="font-size:22px;font-weight:700;color:${sel === cur ? 'var(--alert)' : 'var(--gold2)'}">${L.boss}</span>
+    <p style="margin:0;font-size:13px;line-height:1.7;color:var(--soft)">${L.desc}</p>
+    <div style="border-top:1px dashed var(--line);padding-top:8px;display:flex;justify-content:space-between;font-size:13px"><span class="muted">سلاح العقبة</span><b style="color:var(--gold2)">${L.weapon}</b></div>
+  </section>
+  <p class="foot">تُجتاز كل عقبة بأربعين يومًا من الثبات. وما اجتزتَه يبقى محتاجًا إلى حراسة؛ فالشيطان لا يكفّ عن المحاولة.</p>`;
+};
+V.wisdom = () => {
+  const n = held(); const open = WISDOM.filter(w => n >= w.at).length; const w = WISDOM[selScroll]; const isOpen = n >= w.at;
+  return head('خزانة الحكمة', `${AR(open)} من 7 مخطوطات مفتوحة`) + `
+  <section class="card" style="margin:16px 18px 0;border-color:var(--bronze);background:#15110B;padding:20px 18px;display:flex;flex-direction:column;gap:12px;min-height:220px">
+    <span style="font-size:12px;color:var(--tan);font-weight:700">${w.title}</span>
+    <p style="margin:0;font-family:Amiri,serif;font-size:19px;line-height:1.9;color:#F0E3C6;flex:1">${isOpen ? w.text : 'مخطوطة مختومة. تُفتح حين تصدّ ' + AR(w.at) + ' هجمة — صددتَ حتى الآن ' + AR(n) + '.'}</p>
+    <span class="muted" style="font-size:12px;border-top:1px dashed var(--line);padding-top:10px">${isOpen ? w.src : 'استمر في الرباط'}</span>
+  </section>
+  <h2 class="h2">المخطوطات</h2>
+  <div class="pad" style="display:flex;flex-direction:column;gap:6px">${WISDOM.map((x, i) => { const o = n >= x.at; return `<button class="row" data-act="scroll" data-arg="${i}" style="border-color:${i === selScroll ? 'var(--gold2)' : 'var(--line)'};background:${i === selScroll ? '#221C12' : 'var(--panel)'};color:${o ? 'var(--text)' : 'var(--dim)'}">${ICON.book}<span style="flex:1;font-weight:600">${x.title}</span><span style="font-size:11px;color:var(--dim)">${o ? 'مفتوحة' : 'صُدّ ' + AR(x.at) + ' هجمة'}</span></button>`; }).join('')}</div>`;
+};
+V.night = () => {
+  const d = day(); if (!nightDraft) nightDraft = d.night ? { doors: d.night.doors.slice(), t: d.night.t, k: d.night.k || null } : { doors: [null, null, null, null], t: -1, k: null };
+  const ready = nightDraft.doors.every(Boolean) && !!nightDraft.k;
+  return `<div style="background:radial-gradient(circle at 50% 0%,#141A26 0%,#0A0907 60%)">` + head('المحاسبة الليلية', 'دقيقة واحدة قبل النوم') + `
+  <p class="p" style="text-align:center">«حاسِبوا أنفسكم قبل أن تُحاسَبوا» — طُف على أبواب حصنك، وانظر عند أيّها قاومت وعند أيّها هُزمت.</p>
+  <div class="pad" style="display:flex;flex-direction:column;gap:8px;margin-top:14px">${DOORS.map((x, i) => { const v = nightDraft.doors[i]; return `<div class="card" style="display:flex;align-items:center;gap:8px;padding:10px 12px"><div style="flex:1"><b style="font-size:15px">باب ${x.name}</b><div class="muted" style="font-size:11px">${x.q}</div></div><button data-act="nd" data-arg="${i}:h" style="width:62px;height:44px;border:1px solid ${v === 'h' ? 'var(--gold)' : 'var(--line)'};background:${v === 'h' ? '#3E3018' : 'transparent'};font-weight:700;font-size:13px">قاومت</button><button data-act="nd" data-arg="${i}:f" style="width:62px;height:44px;border:1px solid ${v === 'f' ? 'var(--alert)' : 'var(--line)'};background:${v === 'f' ? '#5A1A12' : 'transparent'};font-weight:700;font-size:13px">هُزمت</button></div>`; }).join('')}</div>
+  <div class="pad" style="margin-top:8px"><div class="card" style="display:flex;align-items:center;gap:8px;padding:10px 12px;border-color:var(--bronze)"><div style="flex:1"><b style="font-size:15px">حصن الخلوة</b><div class="muted" style="font-size:11px">هل صُنتَ نفسك في الخلوة؟</div></div><button data-act="nk" data-arg="h" style="width:62px;height:44px;border:1px solid ${nightDraft.k === 'h' ? 'var(--gold)' : 'var(--line)'};background:${nightDraft.k === 'h' ? '#3E3018' : 'transparent'};font-weight:700;font-size:13px">قاومت</button><button data-act="nk" data-arg="f" style="width:62px;height:44px;border:1px solid ${nightDraft.k === 'f' ? 'var(--alert)' : 'var(--line)'};background:${nightDraft.k === 'f' ? '#5A1A12' : 'transparent'};font-weight:700;font-size:13px">هُزمت</button></div></div>
+  <section class="card" style="margin:14px 18px 0"><div class="muted" style="font-size:13px;margin-bottom:8px">متى كانت أصعب لحظة اليوم؟</div><div class="grid3" style="gap:6px">${TIMES.map((t, i) => `<button class="chip ${nightDraft.t === i ? 'on' : ''}" data-act="nt" data-arg="${i}">${t}</button>`).join('')}</div></section>
+  <div class="pad" style="margin-top:16px;padding-bottom:10px"><button class="big ${ready ? 'calm' : ''}" data-act="nsave" ${ready ? '' : 'disabled style="opacity:.5"'}>${ready ? 'احفظ المحاسبة' : 'أجِب عن الأبواب وحصن الخلوة'}</button></div></div>`;
+};
+V.repair = () => {
+  const d = day(); if (!d.repair) d.repair = [false, false, false];
+  const n = d.repair.filter(Boolean).length, all = n === 3;
+  return head('ترميم الدرع') + `
+  <div style="padding:18px 18px 0;text-align:center"><p style="margin:0;font-family:Amiri,serif;font-size:20px;line-height:1.8;color:#F0E3C6">«وأتبِعِ السيئةَ الحسنةَ تمحُها»</p><p style="margin:6px 0 0;font-size:13px;line-height:1.7;color:var(--soft)">الفارس الذي يسقط ثم ينهض لم يُهزَم. درعك لم يُكسَر، بل خُدِش؛ فرمّمه الآن.</p></div>
+  <div class="pad" style="margin-top:18px"><div style="display:flex;justify-content:space-between;font-size:12px" class="muted"><span>بريق الدرع</span><b style="color:var(--gold2)">${AR(40 + n * 20)}٪</b></div><div class="bar" style="margin-top:6px"><div style="width:${40 + n * 20}%;background:var(--tan)"></div></div></div>
+  <div class="pad" style="display:flex;flex-direction:column;gap:8px;margin-top:18px">${REPAIR.map((s, i) => { const on = d.repair[i]; return `<button class="row ${on ? 'on' : ''}" data-act="rep" data-arg="${i}" style="min-height:70px"><span class="chk kufi" style="width:36px;height:36px">${on ? '✓' : AR(i + 1)}</span><span style="flex:1;display:flex;flex-direction:column;gap:2px"><b style="font-size:16px">${s.t}</b><span class="muted" style="font-size:12px">${s.d}</span></span></button>`; }).join('')}</div>
+  ${all ? `<div class="pad" style="margin-top:18px"><a href="#home" class="big calm">عاد البريق — ارجع إلى الرباط</a></div>` : `<p class="foot">سلسلة ثباتك محفوظة ما دمتَ ترمّم في اليوم نفسه</p>`}`;
+};
+V.ranks = () => {
+  const cur = rankIdx(), b = Math.max(S.best || 0, streak());
+  return head('الرتب', 'سلسلتك الآن: ' + AR(streak()) + ' · أطولها: ' + AR(b)) + `
+  <p class="p">خمس شخصيات على طريق الفارس، من المبتدئ إلى المجاهد. تترقّى بسلسلة أيام الثبات، وتنزل رتبةً كل 7 أيام بلا ثبات.</p>
+  <div class="pad" style="margin-top:18px">${RANKS.map((r, i) => { const past = i < cur, now = i === cur, last = i === RANKS.length - 1; return `<div style="display:flex;gap:14px;align-items:stretch"><div style="width:44px;flex:none;display:flex;flex-direction:column;align-items:center"><div class="kufi" style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:1px solid ${now ? 'var(--gold2)' : (past ? 'var(--tan)' : 'var(--line)')};background:${now ? '#6E1F16' : (past ? '#3E3018' : 'var(--panel)')};color:${i > cur ? 'var(--dim)' : '#F6E7C8'};font-size:18px;font-weight:700;transform:rotate(45deg)"><span style="transform:rotate(-45deg)">${AR(i + 1)}</span></div><div style="flex:1;width:2px;min-height:30px;background:${last ? 'transparent' : (i < cur ? 'var(--tan)' : 'var(--line)')}"></div></div><div style="flex:1;padding:4px 0 20px;display:flex;gap:12px"><img src="rank${i + 1}.jpg" alt="" style="width:64px;height:96px;object-fit:cover;object-position:center 25%;flex:none;border:1px solid ${now ? 'var(--gold2)' : 'var(--line)'};${i > cur ? 'filter:grayscale(1) brightness(.45)' : ''}"><div style="flex:1;display:flex;flex-direction:column;gap:3px"><div style="display:flex;justify-content:space-between;align-items:baseline"><span class="kufi" style="font-size:20px;font-weight:700;color:${i > cur ? 'var(--muted)' : 'var(--gold2)'}">${r.name}</span><span style="font-size:11px;font-weight:700;color:${now ? 'var(--alert)' : (past ? 'var(--tan)' : 'var(--dim)')}">${past ? 'نِلتَها' : (now ? 'رتبتك الآن' : 'مغلقة')}</span></div><span class="muted" style="font-size:12px">${r.days ? 'ثبات ' + AR(r.days) + ' يومًا متتالية' : 'أول يوم في الرباط'}</span><span style="font-size:12px;color:var(--soft)">المكافأة: ${r.gift}</span></div></div></div>`; }).join('')}</div>
+  <p class="foot">الرتبة لا تسقط بزلّة، بل بترك الرباط 7 أيام · <a href="#rules">قواعد الرباط</a></p>
+  <div class="pad" style="margin-top:10px"><button data-act="reset" style="width:100%;height:44px;border:1px solid ${resetArm ? 'var(--alert)' : 'var(--line)'};background:transparent;color:${resetArm ? 'var(--alert)' : 'var(--dim)'};font-size:13px">${resetArm ? 'اضغط مرة أخرى لمسح كل التقدّم' : 'البدء من جديد'}</button></div>`;
+};
+function adhkarView(kind) {
+  const A = ADHKAR[kind], d = day(); if (!d.adh) d.adh = {}; if (!d.adh[kind]) d.adh[kind] = {};
+  const c = d.adh[kind], doneN = A.items.filter((x, i) => (c[i] || 0) >= x.n).length, all = doneN === A.items.length, ticked = !!d.done[kind];
+  return head(A.title, 'من حصن المسلم · اضغط على الذكر لتعدّه') + `
+  <div class="pad" style="margin-top:14px"><div style="display:flex;justify-content:space-between;font-size:12px" class="muted"><span>أتممت ${doneN} من ${A.items.length}</span><span>${Math.round(100 * doneN / A.items.length)}%</span></div>
+  <div style="height:8px;background:#1E1912;border:1px solid var(--line);margin-top:6px"><div style="height:100%;width:${100 * doneN / A.items.length}%;background:var(--tan)"></div></div></div>
+  <div class="pad" style="display:flex;flex-direction:column;gap:10px;margin-top:14px">${A.items.map((x, i) => { const k = Math.min(c[i] || 0, x.n), fin = k >= x.n; return `<button data-act="dh" data-arg="${kind}:${i}" style="text-align:right;display:flex;flex-direction:column;gap:10px;padding:16px;background:${fin ? '#151209' : 'var(--panel)'};border:1px solid ${fin ? 'var(--tan)' : 'var(--line)'};opacity:${fin ? .55 : 1}">
+    ${x.src ? `<span style="font-size:11px;color:var(--tan);font-weight:700">${x.src}</span>` : ''}
+    <span style="font-family:Amiri,serif;font-size:19px;line-height:2;color:#F0E3C6">${x.t}</span>
+    <span style="display:flex;justify-content:space-between;align-items:center;width:100%"><span style="font-size:12px;color:var(--muted)">${x.n > 1 ? 'التكرار: ' + x.n + ' مرات' : 'مرة واحدة'}</span><span style="min-width:64px;height:34px;display:flex;align-items:center;justify-content:center;border:1px solid ${fin ? 'var(--tan)' : 'var(--gold)'};background:${fin ? 'var(--tan)' : 'transparent'};color:${fin ? '#0A0907' : 'var(--gold2)'};font-weight:800;font-size:14px">${fin ? '✓' : k + ' / ' + x.n}</span></span>
+  </button>`; }).join('')}</div>
+  <div class="pad" style="margin-top:16px;display:flex;flex-direction:column;gap:8px">
+    <button class="big ${ticked ? '' : 'calm'}" data-act="dhdone" data-arg="${kind}">${ticked ? '✓ سُجّلت في مهام اليوم' : (all ? 'أتممتُ ' + A.title : 'سجّلها كمُنجزة')}</button>
+    <button data-act="dhreset" data-arg="${kind}" style="background:none;border:0;color:var(--muted);font-size:12px;min-height:40px">تصفير العدّاد</button>
+  </div>`;
+}
+V['adhkar-am'] = () => adhkarView('am');
+V['adhkar-pm'] = () => adhkarView('pm');
+V.xp = () => {
+  const xp = totalXP(), lvl = Math.floor(xp / 400) + 1, into = xp % 400;
+  const EARN = [['مهمة يومية', '+10'], ['صدّ هجمة', '+10 إلى +40'], ['المحاسبة الليلية', '+20'], ['ترميم الدرع بعد الزلّة', '+20'], ['درع العفّة', '+20']];
+  return head('المستوى والخبرة') + `
+  <section class="card cut" style="margin:16px 18px 0;border-color:var(--bronze);display:flex;align-items:center;gap:16px;padding:16px">
+    <div style="width:56px;height:56px;flex:none;margin:6px;transform:rotate(45deg);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center"><span class="kufi" style="transform:rotate(-45deg);font-size:26px;font-weight:700;color:var(--gold2)">${AR(lvl)}</span></div>
+    <div style="flex:1;display:flex;flex-direction:column;gap:6px"><b style="color:var(--gold2)">مستواك الآن: ${AR(lvl)}</b><div style="height:8px;background:#1E1912;border:1px solid var(--line)"><div style="height:100%;width:${into / 4}%;background:var(--tan)"></div></div><span style="font-size:12px;color:var(--soft)">باقي ${AR(400 - into)} خبرة للمستوى ${AR(lvl + 1)}</span></div>
+  </section>
+  <p class="p">المستوى يقيس <b>مجموع جهدك</b>. كل عمل يمنحك خبرة، وكل 400 خبرة ترفعك مستوى. ولا ينزل المستوى أبدًا.</p>
+  <h2 class="h2">كيف تكسب الخبرة</h2>
+  <div class="pad" style="display:flex;flex-direction:column;gap:6px">${EARN.map(e => `<div class="card" style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px"><span style="font-size:14px">${e[0]}</span><b style="color:var(--gold2)">${e[1]}</b></div>`).join('')}</div>
+  <h2 class="h2">المضاعفات</h2>
+  <div class="pad" style="display:flex;flex-direction:column;gap:6px"><div class="card" style="font-size:13px;line-height:1.8;color:var(--soft)">الفجر في وقته يضاعف خبرة اليوم كله ×2، والمواسم تضاعفها ×2.</div></div>
+  <h2 class="h2">المستوى غير الرتبة</h2>
+  <div class="pad"><div class="card" style="font-size:13px;line-height:1.8;color:var(--soft)">المستوى = مجموع جهدك، لا ينزل.<br>الرتبة = ثباتك يومًا بعد يوم، وتنزل إن تركت الرباط.</div></div>
+  <div class="pad grid2" style="margin-top:14px"><a href="#ranks" class="big calm" style="font-size:16px;height:52px">الشخصيات والرتب</a><a href="#rules" class="big calm" style="font-size:16px;height:52px">قواعد الرباط</a></div>`;
+};
+V.rules = () => {
+  const R = [
+    ['يوم الثبات', 'محاسبة ليلية بلا هزيمة، أو ترميم الدرع في اليوم نفسه.'],
+    ['السلسلة', 'أيام ثبات متتالية، يقطعها يومٌ بلا محاسبة.'],
+    ['الرتب', 'تُنال بالسلسلة: حارس 7 · مُرابِط 30 · فارس 90 · مُجاهِد 240 يومًا. وتنزل رتبةً كل 7 أيام بلا ثبات، وتستعيدها بسلسلة جديدة.'],
+    ['العقبات', 'تجتاز عقبة كل 40 يوم ثبات.'],
+    ['الخبرة', 'المهمة 10 · صدّ الهجمة 10–40 (كلما صددتها أبكر زادت) · المحاسبة 20 · الترميم 20. وكل 400 خبرة ترفعك مستوى؛ والمستوى مقياس مجموع جهدك، أما الرتبة فمقياس ثباتك.'],
+    ['المضاعفات', 'الفجر في وقته يضاعف خبرة اليوم، والمواسم تضاعفها.'],
+    ['الدرع', 'تصدأ القطعة إذا تُركت عبادتها يومين، وتعود ببريقها حين تؤديها.'],
+    ['العفّة', 'عدّادٌ مستقل يعود إلى الصفر عند الزلّة في الخلوة، ولا تنزل به الرتبة. ويومٌ بلا نظرة وبلا خلوة يمنحك درع العفّة +20.'],
+    ['المخطوطات', 'تُفتح بعدد الهجمات التي صددتها.']
+  ];
+  return head('قواعد الرباط') + `<div class="pad" style="display:flex;flex-direction:column;gap:8px;margin-top:16px">${R.map((r, i) => `<div class="card" style="display:flex;gap:12px;align-items:flex-start;padding:12px 14px"><span class="kufi" style="width:28px;height:28px;flex:none;display:flex;align-items:center;justify-content:center;border:1px solid var(--bronze);color:var(--gold2);font-weight:700">${AR(i + 1)}</span><div><b style="font-size:15px;color:var(--gold2)">${r[0]}</b><div style="font-size:13px;line-height:1.7;color:var(--soft)">${r[1]}</div></div></div>`).join('')}</div>`;
+};
+V.seasons = () => {
+  const now = seasonsNow(); const list = SEASONS.map(s => ({ s, n: now.indexOf(s) > -1 ? 0 : seasonIn(s) }));
+  const next = list.filter(x => x.n !== null).sort((a, b) => a.n - b.n)[0];
+  return head('مواسم الجهاد') + `
+  ${next ? `<section class="card" style="margin:16px 18px 0;border-color:var(--gold);background:#1A150D;display:flex;flex-direction:column;gap:6px;padding:18px"><span style="font-size:11px;font-weight:700;color:var(--alert)">${next.n === 0 ? 'الموسم قائم الآن — الخبرة ×2' : 'الموسم القادم — بعد ' + AR(next.n) + ' يوم'}</span><span class="kufi" style="font-size:26px;font-weight:700;color:var(--gold2)">${next.s.name}</span><span style="font-size:13px;color:var(--soft)">${next.s.when}</span><div style="display:flex;justify-content:space-between;border-top:1px dashed var(--line);padding-top:10px;font-size:13px"><span class="muted">الغنيمة</span><b style="color:var(--gold2)">${next.s.gift}</b></div></section>` : ''}
+  <h2 class="h2">مواسم السنة</h2>
+  <div class="pad" style="display:flex;flex-direction:column;gap:8px">${list.map(x => `<div class="card" style="display:flex;flex-direction:column;gap:4px;padding:12px 14px;${x.n === 0 ? 'border-color:var(--alert)' : ''}"><div style="display:flex;justify-content:space-between;align-items:baseline"><b style="font-size:16px;color:var(--gold2)">${x.s.name}</b><span style="font-size:12px;color:var(--tan);font-weight:700">${x.s.gift}</span></div><span class="muted" style="font-size:12px">${x.s.quest}</span><span style="font-size:11px;color:var(--dim)">${x.n === 0 ? 'قائم الآن' : (x.n ? 'بعد ' + AR(x.n) + ' يوم تقريبًا' : '')}</span></div>`).join('')}</div>
+  <p class="foot">المواعيد حسب تقويم أم القرى وقد تختلف يومًا عن رؤية بلدك. في المواسم تتضاعف الخبرة.</p>`;
+};
+
+/* ---------- kashida for Kufi display text ---------- */
+const NOLEFT = 'اأإآٱدذرزوؤةء';
+const isLetter = c => /[\u0621-\u064A\u0671]/.test(c) && c !== 'ـ';
+const isMark = c => /[\u064B-\u0652\u0670]/.test(c);
+function kash(t) {
+  let out = '';
+  for (let i = 0; i < t.length; i++) {
+    const c = t[i]; out += c;
+    if (!isLetter(c) || NOLEFT.indexOf(c) > -1) continue;
+    let j = i + 1; while (j < t.length && isMark(t[j])) { out += t[j]; j++; }
+    i = j - 1;
+    const n = t[j];
+    if (n && isLetter(n) && !(c === 'ل' && 'اأإآٱ'.indexOf(n) > -1)) out += 'ـ';
+  }
+  return out;
+}
+function kashAll(root) {
+  root.querySelectorAll('.kufi, .hdr h1, .big, .h2, #intro .nm').forEach(el => {
+    if (el.dataset.k) return; el.dataset.k = '1';
+    const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    let n; while ((n = w.nextNode())) n.nodeValue = kash(n.nodeValue);
+  });
+}
+
+/* ---------- render & events ---------- */
+const app = document.getElementById('app');
+function route() { const r = (location.hash || '').slice(1); return V[r] ? r : 'home'; }
+function render() {
+  const r = route();
+  if (r !== 'fortress') { fort = null; clearInterval(timer); timer = null; }
+  if (r !== 'night') nightDraft = null;
+  if (r !== 'ranks') resetArm = false;
+  syncRank();
+  if (pendingToast) { const m = pendingToast; pendingToast = null; setTimeout(() => toast(m), introOn ? 3200 : 100); try { localStorage.setItem('murabit', JSON.stringify(S)); } catch (e) {} if (dbRef) save(); }
+  app.innerHTML = V[r]() + nav(r);
+  kashAll(app);
+  if (r === 'fortress' && !timer && fort && !fort.won) {
+    timer = setInterval(() => {
+      if (!fort || fort.won) { clearInterval(timer); timer = null; return; }
+      if (fort.left > 0) fort.left--;
+      const s = document.getElementById('secs'), g = document.getElementById('ring');
+      if (s) s.textContent = AR(fort.left);
+      if (g) g.style.background = `conic-gradient(#C9A86A ${Math.round((60 - fort.left) * 6)}deg,#1E1912 0deg)`;
+      if (fort.left === 0) { clearInterval(timer); timer = null; }
+    }, 1000);
+  }
+}
+window.addEventListener('hashchange', () => { render(); window.scrollTo(0, 0); });
+let lastPrayerSig = '';
+setInterval(() => {
+  if (route() !== 'home') return;
+  const ps = prayerState(), sig = ps.list.map(p => p.open + '' + p.missed).join() + today();
+  if (sig !== lastPrayerSig && lastPrayerSig) { lastPrayerSig = sig; render(); return; }
+  lastPrayerSig = sig; const el = document.getElementById('ptnext'); if (el) el.textContent = kash('بعد ') + untilTxt(ps.next.at);
+}, 30000);
+app.addEventListener('change', e => { const el = e.target.closest('[data-act="city"]'); if (!el) return; S.city = +el.value; save(); render(); });
+/* touch fallback: some in-app viewers swallow the synthetic click */
+let tStart = null, lastTouch = 0;
+document.addEventListener('touchstart', e => { const t = e.touches[0]; tStart = { x: t.clientX, y: t.clientY, at: Date.now() }; }, { passive: true });
+document.addEventListener('touchend', e => {
+  if (!tStart) return; const t = e.changedTouches[0];
+  const moved = Math.abs(t.clientX - tStart.x) > 10 || Math.abs(t.clientY - tStart.y) > 10, long = Date.now() - tStart.at > 700; tStart = null;
+  if (moved || long) return;
+  const target = e.target.nodeType === 1 ? e.target : e.target.parentElement; if (!target) return;
+  if (target.closest('select, input, label')) return;
+  if (target.closest('#intro')) return;
+  const act = target.closest('[data-act]'), link = target.closest('a[href^="#"]');
+  if (!act && !link) return;
+  e.preventDefault(); lastTouch = Date.now();
+  if (act) doAct(act);
+  if (link) { const h = link.getAttribute('href'); if (location.hash !== h) location.hash = h; else render(); }
+}, { passive: false });
+app.addEventListener('click', e => {
+  if (Date.now() - lastTouch < 800) { e.preventDefault(); return; }
+  const el = e.target.closest('[data-act]'); if (!el) return;
+  doAct(el);
+});
+function doAct(el) {
+  const a = el.dataset.act, g = el.dataset.arg;
+  if (a === 'dh') { const [k, i] = g.split(':'); const d = day(); d.adh = d.adh || {}; d.adh[k] = d.adh[k] || {}; const n = ADHKAR[k].items[+i].n, c = d.adh[k][i] || 0; if (c < n) { d.adh[k][i] = c + 1; } const all = ADHKAR[k].items.every((x, j) => (d.adh[k][j] || 0) >= x.n); if (all && !d.done[k]) { toggleTask(k); toast('أتممتَ ' + ADHKAR[k].title + ' — تقبّل الله'); } else save(); render(); return; }
+  if (a === 'dhdone') { if (!day().done[g]) toggleTask(g); location.hash = 'home'; return; }
+  if (a === 'dhreset') { const d = day(); if (d.adh) d.adh[g] = {}; save(); render(); return; }
+  if (a === 'lock') { lockApp(); return; }
+  if (a === 'ptoggle') { S.ptOpen = !S.ptOpen; save(); render(); return; }
+  if (a === 'task') { toggleTask(g); render(); return; }
+  if (a === 'piece') { selPiece = +g; if (route() === 'armory') render(); return; }
+  if (a === 'door') { selDoor = +g; render(); return; }
+  if (a === 'fdoorgo') { fort = { door: +g, stage: 0, left: 60, done: [], won: false }; return; }
+  if (a === 'level') { selLevel = +g; render(); return; }
+  if (a === 'scroll') { selScroll = +g; render(); return; }
+  if (a === 'fdoor') { fort.door = +g; fort.done = []; render(); return; }
+  if (a === 'fstage') { fort.stage = +g; render(); return; }
+  if (a === 'fmove') { const i = +g, k = fort.done.indexOf(i); k > -1 ? fort.done.splice(k, 1) : fort.done.push(i); render(); return; }
+  if (a === 'fwin') { S.attacks.push({ ts: Date.now(), door: fort.door, stage: fort.stage, held: true }); if (S.attacks.length > 800) S.attacks.shift(); day().bonus += STAGE_XP[fort.stage]; fort.won = true; save(); render(); const n = held(); const w = WISDOM.find(x => x.at === n); if (w) toast('فُتحت مخطوطة: ' + w.title); return; }
+  if (a === 'ffell') { S.attacks.push({ ts: Date.now(), door: fort.door, stage: fort.stage, held: false }); save(); location.hash = 'repair'; return; }
+  if (a === 'nd') { const [i, v] = g.split(':'); nightDraft.doors[+i] = v; render(); return; }
+  if (a === 'nk') { nightDraft.k = g; render(); return; }
+  if (a === 'nt') { nightDraft.t = +g; render(); return; }
+  if (a === 'nsave') {
+    if (!nightDraft.doors.every(Boolean) || !nightDraft.k) return;
+    const d = day(); const ok = nightDraft.doors.indexOf('f') === -1 && nightDraft.k !== 'f';
+    const pure = nightDraft.k === 'h' && d.done.gaze;
+    if (!d.night || !d.night.awarded) d.bonus += 20;
+    if (pure && !(d.night && d.night.pure)) { d.bonus += 20; setTimeout(() => toast('درع العفّة: يومٌ بلا نظرة وبلا خلوة +20'), 2400); }
+    d.night = { doors: nightDraft.doors.slice(), t: nightDraft.t, k: nightDraft.k, ok: ok, awarded: true, pure: pure || !!(d.night && d.night.pure) };
+    save();
+    if (ok) { toast('أُغلق الحصن — نَم على ذكر'); location.hash = 'home'; } else { location.hash = 'repair'; }
+    return;
+  }
+  if (a === 'rep') { const d = day(); d.repair[+g] = !d.repair[+g]; const all = d.repair.every(Boolean); if (all && !d.repaired) { d.repaired = true; d.bonus += 20; toast('عاد البريق إلى درعك'); } if (!all) d.repaired = false; save(); render(); return; }
+  if (a === 'reset') { if (!resetArm) { resetArm = true; render(); return; } S = blank(); save(); resetArm = false; location.hash = 'home'; render(); return; }
+}
+render();
+try { intro(); } catch (e) { const o = document.getElementById('intro'); if (o) o.remove(); }
+
+function lockApp() {
+  try { window.close(); } catch (e) {}
+  if (document.getElementById('lock')) return;
+  const l = document.createElement('div'); l.id = 'lock';
+  l.setAttribute('style', 'position:fixed;inset:0;z-index:40;background:#070605;display:flex;justify-content:center;opacity:0;transition:opacity .5s ease;cursor:pointer');
+  l.innerHTML = '<div style="position:relative;width:100%;max-width:480px;height:100%;background:#070605 url(poster.jpg) center top/cover no-repeat"><div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,6,5,.15) 0%,rgba(7,6,5,.55) 55%,#070605 100%)"></div><div style="position:absolute;left:0;right:0;bottom:12%;text-align:center"><div class="kufi" style="font-size:34px;font-weight:700;color:#F0D49A">' + kash('الحصن مغلق') + '</div><div style="font-size:14px;color:#B8AA8E;margin-top:8px">اضغط للدخول · أو اسحب التطبيق لإغلاقه نهائيًا</div></div></div>';
+  document.body.appendChild(l);
+  requestAnimationFrame(() => requestAnimationFrame(() => { l.style.opacity = '1'; }));
+  const open = () => { l.style.opacity = '0'; setTimeout(() => l.remove(), 500); };
+  setTimeout(() => { l.addEventListener('click', open); l.addEventListener('touchend', e => { e.preventDefault(); open(); }); }, 400);
+}
+function intro() {
+  const cur = rankIdx();
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const seq = []; for (let i = RANKS.length - 1; i >= cur; i--) seq.push(i);
+  if (reduce) seq.splice(0, seq.length - 1);
+  const ov = document.createElement('div'); ov.id = 'intro';
+  ov.innerHTML = '<div class="fr"><div class="im" id="iim"></div><div class="sh"></div><div class="lb"><div class="nm" id="inm"></div><div class="sb" id="isb"></div></div><div class="ps" id="ips"></div><canvas id="iemb" aria-hidden="true"></canvas><button class="sk" type="button">تخطَّ</button></div>';
+  document.body.appendChild(ov);
+  const im = ov.querySelector('#iim'), nm = ov.querySelector('#inm'), sb = ov.querySelector('#isb');
+  let done = false, t = null;
+  function finish() { if (done) return; done = true; introOn = false; clearTimeout(t); embStop = true; ov.style.opacity = '0'; setTimeout(() => ov.remove(), 520); }
+  ov.addEventListener('click', finish);
+  ov.addEventListener('touchstart', finish, { passive: true });
+  setTimeout(finish, 10500);
+  function show(k) {
+    const i = seq[k], last = k === seq.length - 1;
+    im.style.backgroundImage = 'url(rank' + (i + 1) + '.jpg)';
+    nm.textContent = kash(RANKS[i].name);
+    nm.style.color = last ? '#F0D49A' : '#9A8F7A';
+    sb.textContent = last ? 'رتبتك الآن' : (i === RANKS.length - 1 ? 'الغاية' : '');
+    [im, nm, sb].forEach(e => { e.classList.remove('slam', 'land', 'rise'); void e.offsetWidth; });
+    if (last) { im.classList.add('land'); nm.classList.add('rise'); sb.classList.add('rise'); t = setTimeout(finish, 1500); }
+    else { im.classList.add('slam'); t = setTimeout(() => show(k + 1), k === 0 ? 650 : 280); }
+  }
+  /* fire embers */
+  let embStop = false;
+  const cv = ov.querySelector('#iemb'), ctx = cv.getContext && cv.getContext('2d');
+  if (ctx && !reduce) {
+    const dpr = Math.min(2, window.devicePixelRatio || 1); let W = 0, H = 0;
+    const size = () => { W = cv.clientWidth; H = cv.clientHeight; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); };
+    size();
+    const P = [];
+    const spawn = (y) => ({ x: Math.random() * W, y: y === undefined ? H + 10 : y, r: 0.4 + Math.random() * 1.5, vy: 0.9 + Math.random() * 2.2, vx: (Math.random() - .5) * .4, sw: Math.random() * 6.28, ss: 0.01 + Math.random() * 0.03, life: 0, max: 160 + Math.random() * 220, hue: 8 + Math.random() * 26, fl: Math.random() * 6.28 });
+    for (let i = 0; i < 70; i++) P.push(spawn(H * (0.4 + Math.random() * 0.6)));
+    let last = performance.now();
+    const tick = now => {
+      if (embStop) return;
+      const dt = Math.min(3, (now - last) / 16.7); last = now;
+      if (cv.clientWidth !== W) size();
+      ctx.clearRect(0, 0, W, H);
+      ctx.globalCompositeOperation = 'source-over';
+      const glow = ctx.createLinearGradient(0, H, 0, H * 0.6); glow.addColorStop(0, 'rgba(190,55,10,0.30)'); glow.addColorStop(1, 'rgba(190,55,10,0)');
+      ctx.fillStyle = glow; ctx.fillRect(0, H * 0.6, W, H * 0.4);
+      ctx.globalCompositeOperation = 'lighter';
+      if (P.length < 160) { P.push(spawn()); if (Math.random() < .5) P.push(spawn()); }
+      for (let i = P.length - 1; i >= 0; i--) {
+        const p = P[i]; p.life += dt; p.sw += p.ss * dt;
+        p.y -= p.vy * dt; p.x += (p.vx + Math.sin(p.sw) * 0.5) * dt;
+        const k = p.life / p.max, a = Math.max(0, (k < .15 ? k / .15 : 1 - k)) * (0.35 + 0.65 * (p.y / H));
+        if (k >= 1 || p.y < -10) { P.splice(i, 1); continue; }
+        p.fl += 0.3 * dt; const f = a * (0.75 + 0.25 * Math.sin(p.fl));
+        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 3);
+        g.addColorStop(0, `hsla(${p.hue + 25},100%,82%,${f})`); g.addColorStop(.3, `hsla(${p.hue + 8},100%,58%,${f * .75})`); g.addColorStop(1, `hsla(${p.hue},100%,40%,0)`);
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 3, 0, 6.283); ctx.fill();
+        ctx.strokeStyle = `hsla(${p.hue + 15},100%,65%,${f * .35})`; ctx.lineWidth = p.r * .8; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x - p.vx * 4, p.y + p.vy * 5); ctx.stroke();
+      }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+  /* poster first, then the rank descent */
+  const ps = ov.querySelector('#ips');
+  const pre = seq.map(i => new Promise(r => { const g = new Image(); g.onload = g.onerror = r; g.src = 'rank' + (i + 1) + '.jpg'; }));
+  const poster = new Promise(r => { const g = new Image(); g.onload = g.onerror = r; g.src = 'poster.jpg'; });
+  Promise.race([poster, new Promise(r => setTimeout(r, 1500))]).then(() => {
+    if (done) return;
+    ps.style.backgroundImage = 'url(poster.jpg)'; void ps.offsetWidth; requestAnimationFrame(() => requestAnimationFrame(() => ps.classList.add('in')));
+    setTimeout(() => {
+      if (done) return;
+      Promise.race([Promise.all(pre), new Promise(r => setTimeout(r, 800))]).then(() => {
+        if (done) return;
+        ps.classList.add('out');
+        setTimeout(() => { if (!done) { try { show(0); } catch (e) { finish(); } } }, 250);
+      });
+    }, reduce ? 1200 : 3400);
+  });
+}
+})();
+</script>
+<script>if ('serviceWorker' in navigator && location.protocol === 'https:') { navigator.serviceWorker.register('sw.js').catch(() => {}); }</script>
+</body>
+</html>
